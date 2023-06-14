@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Quartz;
 using Quartz.Impl;
 
@@ -25,33 +27,33 @@ public class SchedulerModel : INotifyPropertyChanged
     
     public SchedulerModel(IScheduler scheduler)
     {
-        this.queues = new List<Queue>()
-        {
-            new Queue(new List<Content>()
-            {
-                new Content(
-                    Content.ContentType.Video,
-                    @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\1.mp4"
-                ),
-                new Content(
-                    Content.ContentType.Video,
-                    @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\2.mp4"
-                ),
-                new Content(
-                    Content.ContentType.Video,
-                    @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
-                )
-            }, "first"),
-            new Queue(new List<Content>()
-            {
-                new Content(
-                    Content.ContentType.Video,
-                    @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\a1.mp4"
-                )
-            }, "second")
-        };
-        _scheduler = scheduler;
-        Start();
+        // this.queues = new List<Queue>()
+        // {
+        //     new Queue(new List<Content>()
+        //     {
+        //         new Content(
+        //             Content.ContentType.Video,
+        //             @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\1.mp4"
+        //         ),
+        //         new Content(
+        //             Content.ContentType.Video,
+        //             @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\2.mp4"
+        //         ),
+        //         new Content(
+        //             Content.ContentType.Video,
+        //             @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
+        //         )
+        //     }, "first"),
+        //     new Queue(new List<Content>()
+        //     {
+        //         new Content(
+        //             Content.ContentType.Video,
+        //             @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\a1.mp4"
+        //         )
+        //     }, "second")
+        // };
+        // _scheduler = scheduler;
+        // Start();
     }
 
     public async Task Start()
@@ -59,6 +61,9 @@ public class SchedulerModel : INotifyPropertyChanged
         var jobs = new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>();
         jobs.Add(CreateJob(queues[0]), new ReadOnlyCollection<ITrigger>(new List<ITrigger>() {CreateTrigger(1)}));
         jobs.Add(CreateJob(queues[1]), new ReadOnlyCollection<ITrigger>(new List<ITrigger>() {CreateTrigger(3)}));
+        
+        var json = JsonConvert.SerializeObject(jobs);
+        File.WriteAllText(@"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\jobs.json", json);
         
         // foreach (var queue in queues)
         // {

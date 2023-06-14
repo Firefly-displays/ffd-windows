@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace deamon.Models;
 
 public class Queue
 {
-    public List<Content> contentList;
+    public List<Content> ContentList { get; set; }
     public string Name { get; set; }
     
     public void AddContent(Content content)
     {
-        contentList.Add(content);
+        ContentList.Add(content);
     }
 
     public Queue(string name)
     {
-        this.contentList = new List<Content>();
+        this.ContentList = new List<Content>();
         this.Name = name;
     }
     
     public Queue(List<Content> contentList, string name)
     {
-        this.contentList = contentList;
-        this.Name = name;
+        ContentList = contentList;
+        Name = name;
     }
 }
