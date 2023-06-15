@@ -105,7 +105,6 @@ public class DisplaysController
         // if (display.SchedulerEntity == null) return;
         var player = new PlayerController(display, null);
         Players.Add(display, player);
-        player.Play();
     }
     
     public void PausePlayer(Display display)

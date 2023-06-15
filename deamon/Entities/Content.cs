@@ -9,28 +9,28 @@ public class Content
         Image
     }
 
-    public ContentType type;
-    public string path;
-    public int duration;
+    public ContentType Type { get; set;}
+    public string Path { get; set;}
+    public int Duration { get; set;}
     
     public Content(ContentType type, string path, int duration = 0)
     {
-        this.type = type;
-        this.path = path;
+        this.Type = type;
+        this.Path = path;
         if (type == ContentType.Video)
         {
-            this.duration = GetDuration();
+            this.Duration = GetDuration();
         }
         else
         {
-            this.duration = duration;
+            this.Duration = duration;
         }
     }
 
     private int GetDuration()
     {
         var ffProbe = new FFProbe();
-        var videoInfo = ffProbe.GetMediaInfo(path);
+        var videoInfo = ffProbe.GetMediaInfo(Path);
         return (int) videoInfo.Duration.TotalSeconds;
     }
 }

@@ -14,9 +14,10 @@ namespace deamon;
 
 public sealed partial class PlayerController
 {
-    private async void InitScheduler(SchedulerConfig schedulerConfig)
+    private async void InitScheduler(SchedulerConfig schedulerConfig, EventHandler schedulerInitialized)
     {
         IScheduler scheduler = await new StdSchedulerFactory().GetScheduler();
+        _scheduler = scheduler;
             
         foreach (var queueTriggerPair in schedulerConfig.QueueTriggerPairs)
         {
@@ -32,6 +33,7 @@ public sealed partial class PlayerController
         }
         
         await scheduler.Start();
+        schedulerInitialized.Invoke(null, EventArgs.Empty);
     }
     
     private ITrigger CreateTrigger(TriggerConfig triggerConfig)
@@ -81,7 +83,7 @@ public class ShowContentJob: IJob
 
         if (currentQueues != null)
         {
-            var queueWithPriority = new QueueWithPriority(queue, priority);
+            var queueWithPriority = new QueueWithPriority(queue, priority, true);
             Debug.WriteLine(DateTime.Now + " - ContentJob is running " + queue?.Name); 
             currentQueues.Add(queueWithPriority);
             System.Threading.Thread.Sleep(1000 * duration);

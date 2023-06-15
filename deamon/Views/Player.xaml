@@ -13,26 +13,17 @@
     <Grid>
         <TextBlock
             Name="TextBlock"
-            Text="{Binding CurrentQueueName}"
+            Text="{Binding CurrentContentSrc}"
         ></TextBlock>
         
-        
-        <!-- <DataGrid ItemsSource="{Binding CurrentQueues, Converter={StaticResource SomeConverter}}" /> -->
-        
-            <!-- <ListBox ItemsSource="{Binding CurrentQueues}"> -->
-            <!--     <ListBox.ItemTemplate> -->
-            <!--         <DataTemplate> -->
-            <!--             <StackPanel> -->
-            <!--                 <TextBlock Text="{Binding Path=., Converter={StaticResource SomeConverter}}"></TextBlock> -->
-            <!--             </StackPanel> -->
-            <!--         </DataTemplate> -->
-            <!--     </ListBox.ItemTemplate> -->
-            <!-- </ListBox> -->
-        
-        <!-- <MediaElement  -->
-        <!--     Name="VideoElement"  -->
-        <!--     LoadedBehavior="Manual" -->
-        <!-- /> -->
-        <!-- <Image x:Name="SlideElement" /> -->
+        <MediaElement
+            Name="VideoElement"
+            Visibility="{Binding CurrentContentIsVideo}"
+            Source="{Binding CurrentContentSrc}"
+        />
+        <!-- LoadedBehavior="Manual" -->
+        <Image
+            x:Name="SlideElement"
+            Source="{Binding CurrentContentSrc}"/>
     </Grid>
 </Window>

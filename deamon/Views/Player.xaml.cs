@@ -24,32 +24,11 @@ namespace deamon;
 
 public partial class Player : Window
 {
-    public Player(Display display)
+    public Player(Display display, PlayerController.ContentIsDoneHandler contentIsDone)
     {
-        
-        // if (DataContext != null)
-        // {
-        //     (DataContext as PlayerDataContext)!.CurrentQueues.CollectionChanged += (sender, args) =>
-        //     {
-        //         Dispatcher.Invoke(() =>
-        //         {
-        //             // var queue = (DataContext as PlayerDataContext).CurrentQueues[0];
-        //             // var name = queue.Queue.Name;
-        //             var contextString = JsonConvert.SerializeObject(DataContext);
-        //             TextBlock.Text = contextString;
-        //             Debug.WriteLine("CurrentQueues changed");
-        //         });
-        //     };
-        // }
-
         InitializeComponent();
-        
+
         WindowState = WindowState.Normal;
-        // Left = screen.WorkingArea.Left;
-        // Top = screen.WorkingArea.Top;
-        // Width = screen.WorkingArea.Width;
-        // Height = screen.WorkingArea.Height;
-        
         Left = display.Bounds[1];
         Top = display.Bounds[0];
         Width = 500;
@@ -59,19 +38,49 @@ public partial class Player : Window
 
         // var controller = new CoreAudioController();
         // controller.SetDefaultDevice(audioDevice);
+        
+        VideoElement.MediaEnded += (o, e) =>
+        {
+            contentIsDone.Invoke();
+        };
+
+        DataContextChanged += (o, e) =>
+        {
+            if (DataContext is PlayerController)
+            {
+                (DataContext as PlayerController)!.PropertyChanged += (o, a) =>
+                {
+                    if (a.PropertyName == "CurrentContentSrc")
+                    {
+                        // var content = ((DataContext as PlayerController)!).CurrentContent;
+                        // TextBlock.Text = content.Path;
+                        // Debug.WriteLine("Ставим новую пластинку - " + ((DataContext as PlayerController)!).CurrentContentSrc);
+                        // Thread.Sleep(((DataContext as PlayerController)!).CurrentContentDuration * 1000);
+                        // Debug.WriteLine("пластинку надо поменять");
+                        // contentIsDone.Invoke();
+
+                        // switch (content.Type)
+                        // {
+                        //     case Content.ContentType.Video:
+                        //         VideoElement.Source = new Uri(content.Path);
+                        //         VideoElement.Play();
+                        //         break;
+                        //     case Content.ContentType.Image:
+                        //         ImageElement.Source = new BitmapImage(new Uri(content.Path));
+                        //         break;
+                        //     case Content.ContentType.Audio:
+                        //         // AudioElement.Source = new Uri(content.Path);
+                        //         // AudioElement.Play();
+                        //         break;
+                        // }
+                    }
+                };
+            }
+        };
 
         // VideoElement.LoadedBehavior = MediaState.Manual;
         // VideoElement.MediaEnded += (o, a) => Play();
     }
-
-    // public Player(SchedulerModel schedulerModel)
-    // {
-    //     this.SchedulerModel = schedulerModel;
-    //     this.DataContext = schedulerModel;
-    //     InitializeComponent();
-    // }
-    //
-    // public SchedulerModel SchedulerModel { get; set; }
 }
 
 public class SomeConverter: IValueConverter

@@ -8,12 +8,14 @@ public class SchedulerConfig
     public string Name { get; set; }
     public string Id { get; set; }
     public List<QueueTriggerPair> QueueTriggerPairs { get; set; }
+    public Queue DefaultQueue { get; set; }
     
-    public SchedulerConfig(string name, string id, List<QueueTriggerPair> queueTriggerPairs)
+    public SchedulerConfig(string name, string id, List<QueueTriggerPair> queueTriggerPairs, Queue defaultQueue)
     {
         Name = name;
         Id = id;
         QueueTriggerPairs = queueTriggerPairs;
+        DefaultQueue = defaultQueue;
     }
 }
 
