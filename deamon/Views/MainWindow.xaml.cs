@@ -17,6 +17,8 @@ namespace deamon
             NotifyIcon.Icon = new System.Drawing.Icon(@"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Icon.ico");
 
             _bw = new BackgroundWorker();
+
+            // var mvm = new MyViewModel();
         }
 
         // private async void Experiment()

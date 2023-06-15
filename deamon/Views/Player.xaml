@@ -7,11 +7,28 @@
         mc:Ignorable="d"
         Title="Player" Height="450" Width="800"
         WindowStartupLocation="Manual">
+    <Window.Resources>
+        <local:SomeConverter x:Key="SomeConverter" />
+    </Window.Resources>
     <Grid>
         <TextBlock
             Name="TextBlock"
-            Text="{Binding Path=CurrentQueue.Name}"
+            Text="{Binding CurrentQueueName}"
         ></TextBlock>
+        
+        
+        <!-- <DataGrid ItemsSource="{Binding CurrentQueues, Converter={StaticResource SomeConverter}}" /> -->
+        
+            <!-- <ListBox ItemsSource="{Binding CurrentQueues}"> -->
+            <!--     <ListBox.ItemTemplate> -->
+            <!--         <DataTemplate> -->
+            <!--             <StackPanel> -->
+            <!--                 <TextBlock Text="{Binding Path=., Converter={StaticResource SomeConverter}}"></TextBlock> -->
+            <!--             </StackPanel> -->
+            <!--         </DataTemplate> -->
+            <!--     </ListBox.ItemTemplate> -->
+            <!-- </ListBox> -->
+        
         <!-- <MediaElement  -->
         <!--     Name="VideoElement"  -->
         <!--     LoadedBehavior="Manual" -->

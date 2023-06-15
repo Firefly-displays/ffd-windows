@@ -23,12 +23,15 @@ public class QueueTriggerPair
     public List<TriggerConfig> Triggers { get; set; }
     
     public int Duration { get; set; }
+    
+    public int Priority { get; set; }
 
-    public QueueTriggerPair(Queue queue, List<TriggerConfig> triggers, int duration)
+    public QueueTriggerPair(Queue queue, List<TriggerConfig> triggers, int duration, int priority)
     {
         Queue = queue;
         Triggers = triggers;
-        this.Duration = duration;
+        Duration = duration;
+        Priority = priority;
     }
 }
 
