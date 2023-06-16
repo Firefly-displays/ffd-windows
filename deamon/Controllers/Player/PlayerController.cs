@@ -26,7 +26,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         {
             var queues = new List<Queue>()
             {
-                new Queue(new List<Content>()
+                new Queue("first", new List<Content>()
                 {
                     new Content(
                         Content.ContentType.Video,
@@ -40,14 +40,14 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                         Content.ContentType.Video,
                         @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
                     )
-                }, "first"),
-                new Queue(new List<Content>()
+                }),
+                new Queue("second", new List<Content>()
                 {
                     new Content(
                         Content.ContentType.Video,
                         @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\a1.mp4"
                     )
-                }, "second")
+                })
             };
             
             schedulerConfig = new SchedulerConfig("default", "default",
@@ -66,13 +66,13 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                     //     new TriggerConfig("every_10_sec", "0 0/2 * * * ?"),
                     //     new TriggerConfig("every_15_sec", "0 0/3 * * * ?")
                     // }, 1, 2)
-                }, new Queue(new List<Content>()
+                }, new Queue("defaultQueue", new List<Content>()
                 {
                     new (
                         Content.ContentType.Image,
                         @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Images\1623540080_32-phonoteka_org-p-abstraktsiya-karandashom-oboi-krasivo-32.jpg",
                         5)
-                },"defaultQueue"));
+                }));
         }
         DefaultQueue = schedulerConfig.DefaultQueue;
         CurrentQueue = DefaultQueue;
@@ -127,11 +127,23 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     public void Play()
     {
-        var playerView = new Player(Display, ContentIsDone);
-        playerView.DataContext = this;
-        playerView.Show();
+        this.PlayerView = new Player(Display, ContentIsDone);
+        PlayerView.DataContext = this;
+        PlayerView.Show();
     }
-    
+
+    private Player PlayerView { get; set; }
+
     public void Pause() => State = PlayerState.Paused;
     public void Resume () =>  State = PlayerState.Playing;
+
+    public void Stop()
+    {
+        PlayerView.Close();
+    }
+
+    public void SkipContent()
+    {
+        PickContent();
+    }
 }

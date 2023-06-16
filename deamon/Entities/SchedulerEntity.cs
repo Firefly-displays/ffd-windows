@@ -24,11 +24,14 @@ public class SchedulerEntity : Entity
     //     this.Name = name;
     //     this.QueueTriggerPairs = new List<QueueTriggerPair>();
     // }
-    
-    [JsonConstructor]
+
     public SchedulerEntity(string name, List<QueueTriggerPair> queueTriggerPairs)
+        : this(null, name, queueTriggerPairs) { }
+
+    [JsonConstructor]
+    public SchedulerEntity(string? id, string name, List<QueueTriggerPair> queueTriggerPairs): base(id)
     {
-        this.Name = name;
-        this.QueueTriggerPairs = queueTriggerPairs;
+        Name = name;
+        QueueTriggerPairs = queueTriggerPairs;
     }
 }

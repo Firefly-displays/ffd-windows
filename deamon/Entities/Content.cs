@@ -1,7 +1,9 @@
-﻿namespace deamon.Models;
+﻿using Newtonsoft.Json;
+
+namespace deamon.Models;
 using NReco.VideoInfo;
 
-public class Content
+public class Content : Entity
 {
     public enum ContentType
     {
@@ -9,22 +11,22 @@ public class Content
         Image
     }
 
-    public ContentType Type { get; set;}
-    public string Path { get; set;}
-    public int Duration { get; set;}
+    public ContentType Type { get => _type; set => SetField(ref _type, value); }
+    private ContentType _type;
     
-    public Content(ContentType type, string path, int duration = 0)
+    public string Path { get => _path; set => SetField(ref _path, value); }
+    private string _path;
+    
+    public int Duration { get => _duration; set => SetField(ref _duration, value); }
+    private int _duration;
+
+    public Content(ContentType type, string path, int duration = 0) : this(null, type, path, duration) {}
+    [JsonConstructor]
+    public Content(string? id, ContentType type, string path, int duration = 0) : base(id)
     {
-        this.Type = type;
-        this.Path = path;
-        if (type == ContentType.Video)
-        {
-            this.Duration = GetDuration();
-        }
-        else
-        {
-            this.Duration = duration;
-        }
+        Type = type;
+        Path = path;
+        Duration = type == ContentType.Video ? GetDuration() : duration;
     }
 
     private int GetDuration()

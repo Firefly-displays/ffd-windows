@@ -67,7 +67,7 @@ public class DisplaysController
                     curr.Bounds.Left,
                     curr.Bounds.Width,
                     curr.Bounds.Height
-                }
+                }, null
             ));
         });
     }
@@ -112,8 +112,25 @@ public class DisplaysController
         Players[display].Pause();
     }
     
+    public void ResumePlayer(Display display)
+    {
+        Players[display].Resume();
+    }
+    
     public void StopPlayer(Display display)
     {
+        Players[display].Stop();
         Players.Remove(display);
+    }
+    
+    public void Restart(Display display)
+    {
+        StopPlayer(display);
+        OpenPlayer(display);
+    }
+    
+    public void SkipContent(Display display)
+    {
+        Players[display].SkipContent();
     }
 }

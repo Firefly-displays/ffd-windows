@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,6 +7,13 @@ namespace deamon.Models;
 
 public abstract class Entity : INotifyPropertyChanged
 {
+    public string Id { get; set; }
+    
+    protected Entity(string? id)
+    {
+        Id = id ?? Guid.NewGuid().ToString();
+    }
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
