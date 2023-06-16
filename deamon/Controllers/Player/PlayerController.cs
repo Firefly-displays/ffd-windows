@@ -28,13 +28,13 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             {
                 new Queue("first", new List<Content>()
                 {
+                    new (
+                        Content.ContentType.Image,
+                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Images\123.jpg",
+                        5),
                     new Content(
                         Content.ContentType.Video,
                         @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\1.mp4"
-                    ),
-                    new Content(
-                        Content.ContentType.Video,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\2.mp4"
                     ),
                     new Content(
                         Content.ContentType.Video,

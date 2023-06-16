@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using deamon.Models;
 using Quartz;
 
@@ -27,6 +28,12 @@ public sealed partial class PlayerController
             CurrentContentSrc = value.Path;
             CurrentContentDuration = value.Duration;
             CurrentContentIsVideo = value.Type == Content.ContentType.Video;
+
+            if (!CurrentContentIsVideo)
+            {
+                var t = new Timer(_ => PickContent(), null, CurrentContentDuration * 1000, Timeout.Infinite);
+            }
+            
             OnPropertyChanged();
         }
     }
