@@ -24,7 +24,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
         if (schedulerConfig == null)
         {
-            var basePath = @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\";
+            var basePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources");
             var queues = new List<Queue>()
             {
                 new Queue("first", new List<Content>()
@@ -39,18 +39,18 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                         1),
                     new Content(
                         Content.ContentType.Video,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\1.mp4"
+                        basePath + @"\Video\1.mp4"
                     ),
                     // new Content(
                     //     Content.ContentType.Video,
-                    //     @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
+                    //     basePath + @"\Video\3.mp4"
                     // )
                 }),
                 new Queue("second", new List<Content>()
                 {
                     new Content(
                         Content.ContentType.Video,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\a1.mp4"
+                        basePath + @"\Video\a1.mp4"
                     )
                 })
             };
@@ -75,7 +75,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                 {
                     new (
                         Content.ContentType.Image,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Images\1623540080_32-phonoteka_org-p-abstraktsiya-karandashom-oboi-krasivo-32.jpg",
+                        basePath + @"\Images\1623540080_32-phonoteka_org-p-abstraktsiya-karandashom-oboi-krasivo-32.jpg",
                         5)
                 }));
         }

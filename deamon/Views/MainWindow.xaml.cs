@@ -15,7 +15,7 @@ namespace deamon
         {
             InitializeComponent();
             Hide();
-            NotifyIcon.Icon = new System.Drawing.Icon(@"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Icon.ico");
+            NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources", "Icon.ico"));
 
             _bw = new BackgroundWorker();
 
