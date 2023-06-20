@@ -87,7 +87,7 @@ public class DisplaysController
         foreach (var display in this.Displays
                      .Where(d => d.Status == Display.DisplayStatus.Online))
         {
-            OpenPlayer(display);
+            OpenPlayer(display.Id);
         }
     }
 
@@ -96,37 +96,42 @@ public class DisplaysController
         foreach (var display in this.Displays
                      .Where(d => d.Status == Display.DisplayStatus.Online))
         {
-            OpenPlayer(display);
+            StopPlayer(display.Id);
         }
     }
     
-    public void OpenPlayer(Display display)
+    public void OpenPlayer(string displayId)
     {
         // if (display.SchedulerEntity == null) return;
+        Display display = Displays.First(d => d.Id == displayId);
         var player = new PlayerController(display, null);
         Players.Add(display, player);
     }
     
-    public void PausePlayer(Display display)
+    public void PausePlayer(string displayId)
     {
-        Players[display].Pause();
+        if (Players.All(p => p.Key.Id != displayId)) return;
+        Players.First(p => p.Key.Id == displayId).Value.Pause();
     }
     
-    public void ResumePlayer(Display display)
+    public void ResumePlayer(string displayId)
     {
-        Players[display].Resume();
+        if (Players.All(p => p.Key.Id != displayId)) return;
+        Players.First(p => p.Key.Id == displayId).Value.Resume();
     }
     
-    public void StopPlayer(Display display)
+    public void StopPlayer(string displayId)
     {
-        Players[display].Stop();
+        if (Players.All(p => p.Key.Id != displayId)) return;
+        Players.First(p => p.Key.Id == displayId).Value.Stop();
+        Display display = Displays.First(d => d.Id == displayId);
         Players.Remove(display);
     }
     
-    public void Restart(Display display)
+    public void Restart(string displayId)
     {
-        StopPlayer(display);
-        OpenPlayer(display);
+        StopPlayer(displayId);
+        OpenPlayer(displayId);
     }
     
     public void SkipContent(Display display)

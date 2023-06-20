@@ -48,23 +48,9 @@ public class DeamonAPI: IDeamonAPI
         (EntityModels[typeof(T).Name] as EntityModel<T>)!.Delete(id);
     }
 
-    public void RestartDisplay(string displayId)
-    {
-        var display = GET<Display>(displayId);
-        DisplaysController.Restart(display);
-    }
-
-    public void PauseDisplay(string displayId)
-    {
-        var display = GET<Display>(displayId);
-        DisplaysController.PausePlayer(display);
-    }
-
-    public void ResumeDisplay(string displayId)
-    {
-        var display = GET<Display>(displayId);
-        DisplaysController.ResumePlayer(display);
-    }
+    public void RestartDisplay(string displayId) => DisplaysController.Restart(displayId);
+    public void PauseDisplay(string displayId) => DisplaysController.PausePlayer(displayId);
+    public void ResumeDisplay(string displayId) => DisplaysController.ResumePlayer(displayId);
 
     public void SkipContent(string displayId)
     {

@@ -16,6 +16,14 @@
                     <MenuItem Header="WinForms"></MenuItem>
                     <MenuItem Header="WPF" ></MenuItem>
                 </MenuItem>
+                <MenuItem Header="Pause"
+                          Click="Pause" />
+                <MenuItem Header="Resume"
+                          Click="Resume" />
+                <!-- <MenuItem Header="Restart" -->
+                <!--           Click="Restart" /> -->
+                <!-- <MenuItem Header="Skip" -->
+                <!--           Click="Skip" /> -->
                 <MenuItem Header="Управление"
                           Click="RunClient" />
                 <MenuItem Header="Выход"

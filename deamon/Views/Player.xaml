@@ -11,15 +11,11 @@
         <local:SomeConverter x:Key="SomeConverter" />
     </Window.Resources>
     <Grid>
-        <TextBlock
-            Name="TextBlock"
-            Text="{Binding CurrentContentSrc}"
-        ></TextBlock>
-        
         <MediaElement
             Name="VideoElement"
             Visibility="{Binding CurrentContentIsVideo}"
             Source="{Binding CurrentContentSrc}"
+            LoadedBehavior="Manual"
         />
         <!-- LoadedBehavior="Manual" -->
         <Image

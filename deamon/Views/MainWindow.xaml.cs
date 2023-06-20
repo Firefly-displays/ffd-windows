@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using deamon.Models;
 
 namespace deamon
 {
@@ -21,16 +22,6 @@ namespace deamon
             // var mvm = new MyViewModel();
         }
 
-        // private async void Experiment()
-        // {
-        //     ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        //     IScheduler scheduler = await schedulerFactory.GetScheduler();
-        //     SchedulerModel schedulerModel = new SchedulerModel(scheduler);
-        //     
-        //     Player player = new Player(schedulerModel);
-        //     player.Show();
-        // }
-        
         private void ExitClick(object sender, RoutedEventArgs e)
         {
             NotifyIcon.Visibility = Visibility.Hidden;
@@ -39,6 +30,23 @@ namespace deamon
         }
 
         private void RunClient(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        
+        private void Pause(object sender, RoutedEventArgs e)
+        {
+            var displayId = _bw.API.GET<Display>()[0].Id;
+            _bw.API.PauseDisplay(displayId);
+        }
+        
+        private void Resume(object sender, RoutedEventArgs e)
+        {
+            var displayId = _bw.API.GET<Display>()[0].Id;
+            _bw.API.ResumeDisplay(displayId);
+        }
+
+        private void Restart(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }

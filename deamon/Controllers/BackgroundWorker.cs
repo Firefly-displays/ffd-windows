@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using deamon.Entities;
 using deamon.Models;
 
 namespace deamon;
@@ -8,9 +9,20 @@ namespace deamon;
 public class BackgroundWorker : IBackgroundWorker
 {
     private DisplaysController displaysController;
+    
+    public DeamonAPI API;
     public BackgroundWorker()
     {
         displaysController = new();
+
+        var d = new Dictionary<string, object>();
+        
+        d.Add("Display", new EntityModel<Display>());
+        d.Add("Content", new EntityModel<Content>());
+        d.Add("Queue", new EntityModel<Queue>());
+        d.Add("SchedulerEntity", new EntityModel<SchedulerEntity>());
+        
+        API = new DeamonAPI(d, displaysController);
         Start();
     }
 
@@ -34,12 +46,12 @@ public class BackgroundWorker : IBackgroundWorker
     {
         foreach (var display in displays)
         {
-            displaysController.StopPlayer(display);
+            displaysController.StopPlayer(display.Id);
         }
     }
     
     public void Pause(Display display)
     {
-        displaysController.PausePlayer(display);
+        displaysController.PausePlayer(display.Id);
     }
 }

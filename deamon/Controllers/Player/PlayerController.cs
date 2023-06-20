@@ -24,22 +24,27 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
         if (schedulerConfig == null)
         {
+            var basePath = @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\";
             var queues = new List<Queue>()
             {
                 new Queue("first", new List<Content>()
                 {
+                    // new (
+                    //     Content.ContentType.Image,
+                    //     basePath + @"\Images\123.jpg",
+                    //     1),
                     new (
                         Content.ContentType.Image,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Images\123.jpg",
-                        5),
+                        basePath + @"\Images\1.jpg",
+                        1),
                     new Content(
                         Content.ContentType.Video,
                         @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\1.mp4"
                     ),
-                    new Content(
-                        Content.ContentType.Video,
-                        @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
-                    )
+                    // new Content(
+                    //     Content.ContentType.Video,
+                    //     @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\Video\3.mp4"
+                    // )
                 }),
                 new Queue("second", new List<Content>()
                 {
@@ -57,10 +62,10 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                     {
                         new TriggerConfig("some_date", DateTime.Now.AddSeconds(5))
                     }, 1*60, 1),
-                    new QueueTriggerPair(queues[1], new List<TriggerConfig>()
-                    {
-                        new TriggerConfig("some_date2", DateTime.Now.AddSeconds(7))
-                    }, 10, 2),
+                    // new QueueTriggerPair(queues[1], new List<TriggerConfig>()
+                    // {
+                    //     new TriggerConfig("some_date2", DateTime.Now.AddSeconds(7))
+                    // }, 10, 0),
                     // new QueueTriggerPair(queues[1], new List<TriggerConfig>()
                     // {
                     //     new TriggerConfig("every_10_sec", "0 0/2 * * * ?"),
@@ -113,8 +118,8 @@ public sealed partial class PlayerController: INotifyPropertyChanged
     
     private void PickContent()
     {
-        // Debug.WriteLine("PickContent");
-        // Debug.WriteLine(JsonConvert.SerializeObject(CurrentQueue));
+        if (!CurrentContentIsVideo && State == PlayerState.Paused) return;
+        
         CurrentContent = IsQueueChanged 
             ? CurrentQueue.ContentList[0] 
             : CurrentQueue.ContentList[(CurrentQueue.ContentList.IndexOf(CurrentContent) + 1) % CurrentQueue.ContentList.Count];
@@ -135,7 +140,12 @@ public sealed partial class PlayerController: INotifyPropertyChanged
     private Player PlayerView { get; set; }
 
     public void Pause() => State = PlayerState.Paused;
-    public void Resume () =>  State = PlayerState.Playing;
+
+    public void Resume ()
+    {
+        State = PlayerState.Playing;
+        if (!CurrentContentIsVideo) PickContent();
+    }
 
     public void Stop()
     {

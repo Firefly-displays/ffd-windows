@@ -50,29 +50,17 @@ public partial class Player : Window
             {
                 (DataContext as PlayerController)!.PropertyChanged += (o, a) =>
                 {
-                    if (a.PropertyName == "CurrentContentSrc")
+                    if (a.PropertyName == "_State")
                     {
-                        // var content = ((DataContext as PlayerController)!).CurrentContent;
-                        // TextBlock.Text = content.Path;
-                        // Debug.WriteLine("Ставим новую пластинку - " + ((DataContext as PlayerController)!).CurrentContentSrc);
-                        // Thread.Sleep(((DataContext as PlayerController)!).CurrentContentDuration * 1000);
-                        // Debug.WriteLine("пластинку надо поменять");
-                        // contentIsDone.Invoke();
-
-                        // switch (content.Type)
-                        // {
-                        //     case Content.ContentType.Video:
-                        //         VideoElement.Source = new Uri(content.Path);
-                        //         VideoElement.Play();
-                        //         break;
-                        //     case Content.ContentType.Image:
-                        //         ImageElement.Source = new BitmapImage(new Uri(content.Path));
-                        //         break;
-                        //     case Content.ContentType.Audio:
-                        //         // AudioElement.Source = new Uri(content.Path);
-                        //         // AudioElement.Play();
-                        //         break;
-                        // }
+                        switch (((PlayerController)DataContext).State)
+                        {
+                           case PlayerController.PlayerState.Paused:
+                               VideoElement.Pause();
+                               break;
+                           case PlayerController.PlayerState.Playing:
+                               VideoElement.Play();
+                               break;
+                        }
                     }
                 };
             }
