@@ -11,6 +11,8 @@ public class BackgroundWorker : IBackgroundWorker
     private DisplaysController displaysController;
     
     public DeamonAPI API;
+    private readonly RemoteClient remoteClient;
+
     public BackgroundWorker()
     {
         displaysController = new();
@@ -24,6 +26,8 @@ public class BackgroundWorker : IBackgroundWorker
         
         API = new DeamonAPI(d, displaysController);
         Start();
+
+        remoteClient = new RemoteClient();
     }
 
     public void Start()
