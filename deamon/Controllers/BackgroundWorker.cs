@@ -27,7 +27,7 @@ public class BackgroundWorker : IBackgroundWorker
         API = new DeamonAPI(d, displaysController);
         Start();
 
-        remoteClient = new RemoteClient();
+        remoteClient = new RemoteClient(API);
     }
 
     public void Start()

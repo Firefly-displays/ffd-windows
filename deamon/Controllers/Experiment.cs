@@ -10,6 +10,7 @@ using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.AdoJobStore;
@@ -33,20 +34,41 @@ public static class Experiment
         // Console.WriteLine(s);
         // var c = JsonConvert.DeserializeObject<Display>(s);
 
-        var m = new EntityModel<Display>();
-        var d = new Display("123", Display.DisplayStatus.Offline, new List<int> {1, 2, 3, 4}, null); 
-        m.Add(d);
+        // var m = new EntityModel<Display>();
+        // var d = new Display("123", Display.DisplayStatus.Offline, new List<int> {1, 2, 3, 4}, null); 
+        // m.Add(d);
+        //
+        // // var all = m.GetAll();
+        // // var one = m.GetById(d.Id).Name;
+        //
+        // var updated = new Display(d.Id, "1234", Display.DisplayStatus.Online,
+        //     new List<int>() { 2, 3, 4, 5 }, null);
+        // m.Update(updated);
+        //
+        // var updatedName = m.GetById(d.Id).Name;
+        //
+        // Console.ReadKey();
 
-        // var all = m.GetAll();
-        // var one = m.GetById(d.Id).Name;
-
-        var updated = new Display(d.Id, "1234", Display.DisplayStatus.Online,
-            new List<int>() { 2, 3, 4, 5 }, null);
-        m.Update(updated);
+        List<JObject> someList = new List<JObject>()
+        {
+            new JObject()
+            {
+                { "name", "someName" },
+                {"status", "someStatus"}
+            },
+            new JObject()
+            {
+                { "name", "someName" },
+                {"status", "someStatus"}
+            },
+            new JObject()
+            {
+                { "name", "someName" },
+                {"status", "someStatus"}
+            }
+        };
         
-        var updatedName = m.GetById(d.Id).Name;
-
-        Console.ReadKey();
+        Console.WriteLine(JsonConvert.SerializeObject(someList));
     }
 }
 
