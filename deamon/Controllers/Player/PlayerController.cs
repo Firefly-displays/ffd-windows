@@ -33,13 +33,13 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                     //     Content.ContentType.Image,
                     //     basePath + @"\Images\123.jpg",
                     //     1),
-                    new (
+                    new ("12",
                         Content.ContentType.Image,
                         basePath + @"\Images\1.jpg",
-                        1),
-                    new Content(
+                        null, 1),
+                    new Content("123",
                         Content.ContentType.Video,
-                        basePath + @"\Video\1.mp4"
+                        basePath + @"\Video\1.mp4", null
                     ),
                     // new Content(
                     //     Content.ContentType.Video,
@@ -48,9 +48,9 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                 }),
                 new Queue("second", new List<Content>()
                 {
-                    new Content(
+                    new Content("1234",
                         Content.ContentType.Video,
-                        basePath + @"\Video\a1.mp4"
+                        basePath + @"\Video\a1.mp4", null
                     )
                 })
             };
@@ -73,10 +73,10 @@ public sealed partial class PlayerController: INotifyPropertyChanged
                     // }, 1, 2)
                 }, new Queue("defaultQueue", new List<Content>()
                 {
-                    new (
+                    new ("789",
                         Content.ContentType.Image,
                         basePath + @"\Images\1623540080_32-phonoteka_org-p-abstraktsiya-karandashom-oboi-krasivo-32.jpg",
-                        5)
+                        null, 5)
                 }));
         }
         DefaultQueue = schedulerConfig.DefaultQueue;

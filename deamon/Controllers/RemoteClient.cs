@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Aspose.Imaging;
-using deamon.Entities;
 using deamon.Models;
 using Microsoft.MixedReality.WebRTC;
 using Newtonsoft.Json;
@@ -81,7 +79,21 @@ public class RemoteClient
                 }
                 
                 break;
-            // case "content": t = typeof(Content); break;
+            case "content":
+                var contents = id == "*" 
+                    ? deamonApi.GET<Content>() 
+                    : new List<Content>() { deamonApi.GET<Content>(id) };
+                
+                foreach (var content in contents)
+                {
+                    result.Add(new()
+                    {
+                        { "id", content.Id },
+                        { "name", content.Name },
+                        { "img", content.GetBaseThumb() }
+                    }); 
+                }
+                break;
             // case "queue": t = typeof(Queue); break;
             // case "schedulerEntity": t = typeof(SchedulerEntity); break;
             default: return;
@@ -198,10 +210,13 @@ public class RemoteClient
                             var thumpPath = newPath + ".jpg";
                             File.Move(saveFilePath, newPath, true);
                             
-                            Content newContent = new Content(((string)payload["type"]!).StartsWith("video") 
-                                ? Content.ContentType.Video 
-                                : Content.ContentType.Image, newPath);
-                            
+                            Content newContent = new Content(
+                                (string)payload["name"]!,
+                                ((string)payload["type"]!).StartsWith("video") 
+                                        ? Content.ContentType.Video 
+                                        : Content.ContentType.Image, 
+                                newPath, null);
+
                             deamonApi.POST(newContent);
                             
                             var thumbFileStream = new FileStream(thumpPath, FileMode.Create, FileAccess.Write);
@@ -210,6 +225,8 @@ public class RemoteClient
                             thumbFileStream.Close();
                             Debug.WriteLine("Saved raw thump.");
 
+                            newContent.ThumbPath = thumpPath;
+                            deamonApi.UPDATE(newContent);
                             
                             break;
                         case "abortSending":
