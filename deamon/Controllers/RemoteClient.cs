@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Aspose.Imaging;
 using deamon.Entities;
 using deamon.Models;
 using Microsoft.MixedReality.WebRTC;
@@ -186,16 +187,38 @@ public class RemoteClient
                     {
                         case "startSending":
                             saveFilePath = Path.Combine(
-                                AppDomain.CurrentDomain.BaseDirectory,
-                                "../../../Resources/Media/"
-                                ) + "saving_" + (string)payload["name"]!; 
+                                    AppDomain.CurrentDomain.BaseDirectory,
+                                    "../../../Resources/Media/"
+                                ) + Guid.NewGuid() + "_" + (string)payload["name"]! + ".tmp"; 
                             saveFileStream = new FileStream(saveFilePath, FileMode.Create, FileAccess.Write);
                             break;
                         case "endSending": 
                             saveFileStream.Close();
-                            File.Move(
-                                saveFilePath, 
-                                saveFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources/Media/") + (string)payload["name"]!);
+                            var newPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources/Media/") + Guid.NewGuid() + "_" + (string)payload["name"]!;
+                            var thumpPath = newPath + ".jpg";
+                            File.Move(saveFilePath, newPath, true);
+                            
+                            Content newContent = new Content(((string)payload["type"]!).StartsWith("video") 
+                                ? Content.ContentType.Video 
+                                : Content.ContentType.Image, newPath);
+                            
+                            deamonApi.POST(newContent);
+                            
+                            var thumbFileStream = new FileStream(thumpPath, FileMode.Create, FileAccess.Write);
+                            var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+                            ffMpeg.GetVideoThumbnail(newPath, thumbFileStream, 5);
+                            thumbFileStream.Close();
+                            Debug.WriteLine("Saved raw thump.");
+
+                            
+                            break;
+                        case "abortSending":
+                            try
+                            {
+                                saveFileStream.Close();
+                                File.Delete(saveFilePath);
+                            }
+                            catch (Exception e) {  Debug.WriteLine(e); }
                             break;
                     }
                 }
