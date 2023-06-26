@@ -94,7 +94,31 @@ public class RemoteClient
                     }); 
                 }
                 break;
-            // case "queue": t = typeof(Queue); break;
+            case "queue":
+                if (id == "*")
+                {
+                    var queues = deamonApi.GET<Queue>();
+                    Debug.WriteLine("fetching queues");
+                    Debug.WriteLine(queues.Count);
+                    foreach (var queue in queues)
+                    {
+                        result.Add(new()
+                        {
+                            { "id", queue.Id },
+                            { "name", queue.Name }
+                        }); 
+                    }
+                }
+                else
+                {
+                    var queue = deamonApi.GET<Queue>(id);
+                    result.Add(new()
+                    {
+                        { "id", queue.Id },
+                        { "name", queue.Name }
+                    });
+                }
+                break;
             // case "schedulerEntity": t = typeof(SchedulerEntity); break;
             default: return;
         }
