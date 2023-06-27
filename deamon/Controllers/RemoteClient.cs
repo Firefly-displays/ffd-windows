@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using deamon.Models;
 using Microsoft.MixedReality.WebRTC;
 using Newtonsoft.Json;
@@ -112,10 +113,26 @@ public class RemoteClient
                 else
                 {
                     var queue = deamonApi.GET<Queue>(id);
+                    var items = queue.ContentList.Select((c, i) =>
+                    {
+                        return new JObject()
+                        {
+                            {
+                                "media", new JObject()
+                                {
+                                    { "id", c.Id },
+                                    { "name", c.Name },
+                                    { "img", c.GetBaseThumb() }
+                                }
+                            },
+                            { "priority", i }
+                        };
+                    });
                     result.Add(new()
                     {
                         { "id", queue.Id },
-                        { "name", queue.Name }
+                        { "name", queue.Name },
+                        { "items", JsonConvert.SerializeObject(items) }
                     });
                 }
                 break;
