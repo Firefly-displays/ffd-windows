@@ -46,6 +46,7 @@ public partial class RemoteClient
             switch ((string)jsonMsg["type"]!)
             {
                 case "get": Get(jsonMsg); break;
+                case "post": Post(jsonMsg); break;
                 case "iceCandidate": HandleIceCandidate(jsonMsg); break;
                 case "offer": HandleOffer(jsonMsg); break;
             }
