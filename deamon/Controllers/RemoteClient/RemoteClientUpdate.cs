@@ -29,6 +29,9 @@ public partial class RemoteClient
                         catch (Exception e) { result = "error"; } break;
                     case "down": try { queue = downMedia(queue, (string)payload["mediaId"]!); }
                         catch (Exception e) { result = "error"; } break;
+                    case "rename":
+                        try { queue.Name = (string)payload["name"]!; }
+                        catch (Exception e) { result = "error"; } break;
                 }
                 
                 deamonApi.UPDATE(queue);
