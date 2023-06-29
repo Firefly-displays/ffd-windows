@@ -34,6 +34,8 @@ public partial class RemoteClient
                     case "rename":
                         try { queue.Name = (string)payload["name"]!; }
                         catch (Exception e) { result = "error"; } break;
+                    case "removeMedia": try { queue = RemoveMedia(queue, (string)payload["mediaId"]!); }
+                        catch (Exception e) { result = "error"; } break;
                     case "add":
                         try
                         {
@@ -75,6 +77,20 @@ public partial class RemoteClient
             { "requestId", requestId },
             { "payload", result }
         }.ToString());
+    }
+
+    private Queue RemoveMedia(Queue queue, string mediaId)
+    {
+        var contentList = queue.ContentList;
+        var contentId = mediaId;
+        var index = contentList.FindIndex(el => el.Id == contentId);
+        if (index == -1) throw new System.Exception("Media not found");   
+        var item = contentList.Find(el => el.Id == contentId);
+        contentList.RemoveAt(index);
+
+        queue.ContentList = contentList;
+        
+        return queue;
     }
 
     private Queue UpMedia(Queue queue, string mediaId)
