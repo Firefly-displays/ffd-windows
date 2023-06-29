@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json.Linq;
 
@@ -17,17 +18,10 @@ public partial class RemoteClient
         switch (entity)
         {
             case "queue":
-                string name = (string)payload["name"]!;
-                string[] contentIds = payload["mediaIds"]!.ToObject<string[]>()!;
-                var contentList = new List<Content>();
-                foreach (var contentId in contentIds)
-                {
-                    contentList.Add(deamonApi.GET<Content>(contentId));
-                }
-
-                var queue = new Queue(name, contentList);
-                deamonApi.POST(queue);
-                result = queue.Id;
+                result = AddQueue(payload);
+                break;
+            case "scheduler":
+                result = AddScheduler(payload); 
                 break;
         }
         
@@ -37,5 +31,38 @@ public partial class RemoteClient
             { "requestId", requestId },
             { "payload", result }
         }.ToString());
+    }
+    
+    private string AddScheduler(JObject payload)
+    {
+        string name = (string)payload["name"]!;
+
+        var scheduler = new SchedulerEntity(name);
+        deamonApi.POST(scheduler);
+        
+        return new JObject()
+        {
+            { "id", scheduler.Id },
+            { "name", scheduler.Name }
+        }.ToString();
+    }
+
+    private string AddQueue(JObject payload)
+    {
+        string name = (string)payload["name"]!;
+        string[] contentIds = payload["mediaIds"]!.ToObject<string[]>()!;
+        var contentList = new List<Content>();
+        foreach (var contentId in contentIds)
+        {
+            contentList.Add(deamonApi.GET<Content>(contentId));
+        }
+
+        var queue = new Queue(name, contentList);
+        deamonApi.POST(queue);
+        return new JObject()
+        {
+            { "id", queue.Id },
+            { "name", queue.Name }
+        }.ToString();
     }
 }
