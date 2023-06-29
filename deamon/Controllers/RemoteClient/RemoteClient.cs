@@ -38,19 +38,23 @@ public partial class RemoteClient
 
         ws.OnMessage += async (sender, e) =>
         {
-            var msg = e.Data;
-
-            Debug.WriteLine($"web socket recv: {msg.Length} bytes");
-            JObject jsonMsg = JObject.Parse(msg);
-
-            switch ((string)jsonMsg["type"]!)
+            try
             {
-                case "get": Get(jsonMsg); break;
-                case "post": Post(jsonMsg); break;
-                case "update": Update(jsonMsg); break;
-                case "iceCandidate": HandleIceCandidate(jsonMsg); break;
-                case "offer": HandleOffer(jsonMsg); break;
+                var msg = e.Data;
+
+                Debug.WriteLine($"web socket recv: {msg.Length} bytes");
+                JObject jsonMsg = JObject.Parse(msg);
+
+                switch ((string)jsonMsg["type"]!)
+                {
+                    case "get": Get(jsonMsg); break;
+                    case "post": Post(jsonMsg); break;
+                    case "update": Update(jsonMsg); break;
+                    case "iceCandidate": HandleIceCandidate(jsonMsg); break;
+                    case "offer": HandleOffer(jsonMsg); break;
+                }
             }
+            catch (Exception exception) { Debug.WriteLine(exception); }
         };
         
         ws.Connect();

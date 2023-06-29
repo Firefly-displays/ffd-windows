@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using deamon.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace deamon;
@@ -12,7 +14,7 @@ public partial class RemoteClient
     {
         string entity = (string)jsonMsg["entity"]!;
         string id = (string)jsonMsg["id"]!;
-        string? requestId = (string)jsonMsg["requestId"];
+        string? requestId = (string)jsonMsg["requestId"]!;
         JObject payload = JObject.Parse((string)jsonMsg["payload"]!);
         string result = "";
 
@@ -25,13 +27,42 @@ public partial class RemoteClient
                 switch (action)
                 {
                     case "up":
-                        try { queue = upMedia(queue, (string)payload["mediaId"]!); }
+                        try { queue = UpMedia(queue, (string)payload["mediaId"]!); }
                         catch (Exception e) { result = "error"; } break;
-                    case "down": try { queue = downMedia(queue, (string)payload["mediaId"]!); }
+                    case "down": try { queue = DownMedia(queue, (string)payload["mediaId"]!); }
                         catch (Exception e) { result = "error"; } break;
                     case "rename":
                         try { queue.Name = (string)payload["name"]!; }
                         catch (Exception e) { result = "error"; } break;
+                    case "add":
+                        try
+                        {
+                            var contentList = queue.ContentList;
+                            var contentIds = payload["mediaId"]!.ToObject<List<string>>();
+
+                            var resList = new List<JObject>();
+
+                            if (contentIds != null)
+                                foreach (var contentId in contentIds)
+                                {
+                                    var content = deamonApi.GET<Content>(contentId);
+                                    contentList.Add(content);
+                                    resList.Add(new JObject()
+                                    {
+                                        { "id", content.Id },
+                                        { "name", content.Name },
+                                        { "img", content.GetBaseThumb() }
+                                    });
+                                }
+
+                            queue.ContentList = contentList;
+                            result = JsonConvert.SerializeObject(resList);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e);
+                            result = "error";
+                        } break;
                 }
                 
                 deamonApi.UPDATE(queue);
@@ -46,7 +77,7 @@ public partial class RemoteClient
         }.ToString());
     }
 
-    private Queue upMedia(Queue queue, string mediaId)
+    private Queue UpMedia(Queue queue, string mediaId)
     {
         var contentList = queue.ContentList;
         var contentId = mediaId;
@@ -62,7 +93,7 @@ public partial class RemoteClient
         return queue;
     }
     
-    private Queue downMedia(Queue queue, string mediaId)
+    private Queue DownMedia(Queue queue, string mediaId)
     {
         var contentList = queue.ContentList;
         var contentId = mediaId;
