@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -91,7 +92,51 @@ public partial class RemoteClient
                     });
                 }
                 break;
-            // case "schedulerEntity": t = typeof(SchedulerEntity); break;
+            case "scheduler": 
+                if (id == "*")
+                {
+                    var schedulers = deamonApi.GET<SchedulerEntity>();
+                    foreach (var scheduler in schedulers)
+                    {
+                        result.Add(new()
+                        {
+                            { "id", scheduler.Id },
+                            { "name", scheduler.Name }
+                        }); 
+                    }
+                }
+                else
+                {
+                    var scheduler = deamonApi.GET<SchedulerEntity>(id);
+
+                    var queues = scheduler.QueueTriggerPairs.Select((q, i) =>
+                    {
+                        return new JObject()
+                        {
+                            {
+                                "queue", new JObject()
+                                {
+                                    { "id", q.Queue.Id },
+                                    { "name", q.Queue.Name }
+                                }
+                            },
+                            { "id", q.Id },
+                            { "cron", q.Cron },
+                            { "emitTime", q.EmitTime },
+                            { "duration", q.Duration },
+                            { "priority", q.Priority }
+                        };
+                    });
+
+                    result.Add(new JObject()
+                    {
+                        { "id", scheduler.Id },
+                        { "name", scheduler.Name },
+                        { "defaultQueue", scheduler.DefaultQueue == null ? "" : scheduler.DefaultQueue.Id },
+                        { "queues", JsonConvert.SerializeObject(queues) }
+                    });
+                }; 
+                break;
             default: return;
         }
         
