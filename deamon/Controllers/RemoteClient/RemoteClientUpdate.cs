@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,13 +17,13 @@ public partial class RemoteClient
         string id = (string)jsonMsg["id"]!;
         string? requestId = (string)jsonMsg["requestId"]!;
         JObject payload = JObject.Parse((string)jsonMsg["payload"]!);
+        string action = (string)payload["action"]!;
         string result = "";
 
         switch (entity)
         {
             case "queue":
                 var queue = deamonApi.GET<Queue>(id);
-                var action = (string)payload["action"]!;
 
                 switch (action)
                 {
@@ -68,6 +69,18 @@ public partial class RemoteClient
                 }
                 
                 deamonApi.UPDATE(queue);
+                break;
+            
+            case "scheduler":
+                var scheduler = deamonApi.GET<SchedulerEntity>(id);
+
+                switch (action)
+                {
+                    case "changeDefaultQueue":
+                        try { scheduler.DefaultQueue = deamonApi.GET<Queue>((string)payload["defaultQueue"]!); }
+                        catch (Exception e) { result = "error"; } break;
+                }
+                
                 break;
         }
         
