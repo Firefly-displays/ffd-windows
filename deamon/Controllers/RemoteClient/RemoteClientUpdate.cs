@@ -6,6 +6,7 @@ using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using QueueTriggerPair = deamon.Entities.QueueTriggerPair;
 
 namespace deamon;
 
@@ -79,6 +80,9 @@ public partial class RemoteClient
                     case "changeDefaultQueue":
                         try { scheduler.DefaultQueue = deamonApi.GET<Queue>((string)payload["defaultQueue"]!); }
                         catch (Exception e) { result = "error"; } break;
+                    case "schedule":
+                        try { result = Schedule(id, payload); }
+                        catch (Exception e) { result = "error"; } break;
                 }
                 
                 break;
@@ -90,6 +94,29 @@ public partial class RemoteClient
             { "requestId", requestId },
             { "payload", result }
         }.ToString());
+    }
+    
+    private string Schedule(string schedulerId, JObject payload)
+    {
+        var scheduler = deamonApi.GET<SchedulerEntity>(schedulerId);
+        var queue = deamonApi.GET<Queue>((string)payload["queue"]!);
+        var cron = (string?)payload["cron"]!;
+        var emitTime = (DateTime?)payload["emitTime"]!;
+        var duration = (int)payload["duration"]!*60;
+        
+        var queueTriggerPairs = scheduler.QueueTriggerPairs;
+        
+        var p = new QueueTriggerPair(queue, cron, emitTime, duration, 0);
+        foreach (var schedulerQueueTriggerPair in queueTriggerPairs)
+        {
+            schedulerQueueTriggerPair.Priority += 1;
+        }
+        queueTriggerPairs.Add(p);
+        scheduler.QueueTriggerPairs = queueTriggerPairs;
+        
+        deamonApi.UPDATE(scheduler);
+
+        return p.Id;
     }
 
     private Queue RemoveMedia(Queue queue, string mediaId)
