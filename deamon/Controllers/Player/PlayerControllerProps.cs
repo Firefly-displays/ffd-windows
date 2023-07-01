@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using deamon.Models;
@@ -25,7 +27,18 @@ public sealed partial class PlayerController
         set
         {
             _CurrectContent = value;
-            CurrentContentSrc = value.Path;
+            if (value.Type == Content.ContentType.Video)
+            {
+                CurrentContentVideoSrc = value.Path;
+                CurrentContentImgSrc =  Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "../../../Resources/black.jpg");
+            }
+            else
+            {
+                CurrentContentVideoSrc = "";
+                CurrentContentImgSrc = value.Path;
+            }
             CurrentContentDuration = value.Duration;
             CurrentContentIsVideo = value.Type == Content.ContentType.Video;
 
@@ -38,13 +51,24 @@ public sealed partial class PlayerController
         }
     }
 
-    private string _CurrentContentSrc;
-    public string CurrentContentSrc
+    private string _CurrentContentImgSrc;
+    public string CurrentContentImgSrc
     {
-        get => _CurrentContentSrc; 
+        get => _CurrentContentImgSrc; 
         set
         {
-            _CurrentContentSrc = value;
+            _CurrentContentImgSrc = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    private string _CurrentContentVideoSrc;
+    public string CurrentContentVideoSrc
+    {
+        get => _CurrentContentVideoSrc; 
+        set
+        {
+            _CurrentContentVideoSrc = value;
             OnPropertyChanged();
         }
     }
@@ -67,6 +91,18 @@ public sealed partial class PlayerController
         set
         {
             _CurrentContentIsVideo = value;
+            CurrentContentIsImg = !value;
+            OnPropertyChanged();
+        }
+    }
+    
+    private bool _CurrentContentIsImg;
+    public bool CurrentContentIsImg
+    {
+        get => _CurrentContentIsImg; 
+        set
+        {
+            _CurrentContentIsImg = value;
             OnPropertyChanged();
         }
     }

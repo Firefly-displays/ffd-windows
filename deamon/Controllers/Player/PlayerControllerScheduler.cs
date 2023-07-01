@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using deamon.Entities;
 using deamon.Models;
 using Quartz;
 using Quartz.Impl;
@@ -14,22 +15,25 @@ namespace deamon;
 
 public sealed partial class PlayerController
 {
-    private async void InitScheduler(SchedulerConfig schedulerConfig, EventHandler schedulerInitialized)
+    private async void InitScheduler(SchedulerEntity schedulerEntity, EventHandler schedulerInitialized)
     {
         IScheduler scheduler = await new StdSchedulerFactory().GetScheduler();
         _scheduler = scheduler;
             
-        foreach (var queueTriggerPair in schedulerConfig.QueueTriggerPairs)
+        foreach (var queueTriggerPair in schedulerEntity.QueueTriggerPairs)
         {
-            foreach (var triggerConfig in queueTriggerPair.Triggers)
-            {
-                var job = CreateJob(
-                    queueTriggerPair.Queue, 
-                    queueTriggerPair.Duration,
-                    queueTriggerPair.Priority);
-                var trigger = CreateTrigger(triggerConfig);
-                await scheduler.ScheduleJob(job, trigger);
-            }
+            var job = CreateJob(
+                queueTriggerPair.Queue, 
+                queueTriggerPair.Duration,
+                queueTriggerPair.Priority);
+            var trigger = CreateTrigger(new TriggerConfig(
+                Guid.NewGuid().ToString(),
+                queueTriggerPair.Cron, 
+                queueTriggerPair.EmitTime,
+                queueTriggerPair.Cron != null 
+                    ? TriggerConfig.TriggerType.Cron 
+                    : TriggerConfig.TriggerType.OneTime));
+            await scheduler.ScheduleJob(job, trigger);
         }
         
         await scheduler.Start();

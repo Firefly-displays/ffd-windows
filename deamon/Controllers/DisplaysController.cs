@@ -83,11 +83,18 @@ public class DisplaysController
 
     public void RunOnline()
     {
-        Debug.WriteLine("RunOnline");
-        foreach (var display in this.Displays
-                     .Where(d => d.Status == Display.DisplayStatus.Online))
+        try
         {
-            OpenPlayer(display.Id);
+            Debug.WriteLine("RunOnline");
+            foreach (var display in this.Displays
+                         .Where(d => d.Status == Display.DisplayStatus.Online))
+            {
+                OpenPlayer(display.Id);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
         }
     }
 
@@ -104,7 +111,7 @@ public class DisplaysController
     {
         // if (display.SchedulerEntity == null) return;
         Display display = Displays.First(d => d.Id == displayId);
-        var player = new PlayerController(display, null);
+        var player = new PlayerController(display);
         Players.Add(display, player);
     }
     
