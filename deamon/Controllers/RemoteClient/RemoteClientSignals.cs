@@ -30,9 +30,6 @@ public partial class RemoteClient
                 break;
             case "restart":
                 // deamonApi.RestartDisplay(displayId);
-                string currentFilePath = Process.GetCurrentProcess().MainModule.FileName;
-                Process.Start(currentFilePath);
-                Application.Current.Shutdown();
                 Debug.WriteLine("restart");
                 break;
             case "run":

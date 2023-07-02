@@ -116,7 +116,14 @@ public class DisplaysController
         foreach (var display in this.Displays
                      .Where(d => d.Status == Display.DisplayStatus.Online))
         {
-            StopPlayer(display.Id);
+            try
+            {
+                StopPlayer(display.Id);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
     }
     

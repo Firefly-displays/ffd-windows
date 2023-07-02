@@ -9,6 +9,7 @@ using System.Threading;
 using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Quartz;
 using Queue = deamon.Models.Queue;
 using QueueTriggerPair = deamon.Models.QueueTriggerPair;
@@ -90,6 +91,16 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         
         Debug.WriteLine("PickContent");
         Debug.WriteLine(JsonConvert.SerializeObject(CurrentContent.Path));
+        
+        RemoteClient.GetInstance().WSSend(new JObject()
+        {
+            { "type", "currMediaChanged" },
+            { "displayId", Display.Id },
+            { "contentName", CurrentContent.Name },
+            { "contentId", CurrentContent.Id },
+            { "queueName", CurrentQueue.Name },
+            {  "queueId", CurrentQueue.Id }
+        }.ToString());
     }
     
     public delegate void ContentIsDoneHandler();

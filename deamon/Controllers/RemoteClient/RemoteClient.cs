@@ -74,7 +74,7 @@ public partial class RemoteClient
         ws.Connect();
     }
 
-    private void WSSend(string msg)
+    public void WSSend(string msg)
     {
         ws.Send(new JObject()
         {
