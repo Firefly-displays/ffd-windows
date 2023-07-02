@@ -86,6 +86,9 @@ public partial class RemoteClient
                     case "editSchedule":
                         try { result = EditSchedule(id, payload); }
                         catch (Exception e) { result = "error"; } break;
+                    case "dropQueue":
+                        try { result = DropQueue(id, (string)payload["itemId"]!); }
+                        catch (Exception e) { result = "error"; } break;
                 }
                 
                 break;
@@ -97,6 +100,17 @@ public partial class RemoteClient
             { "requestId", requestId },
             { "payload", result }
         }.ToString());
+    }
+    
+    private string DropQueue(string schedulerId, string queueId)
+    {
+        var scheduler = deamonApi.GET<SchedulerEntity>(schedulerId);
+        var queueTriggerPairs = scheduler.QueueTriggerPairs;
+        var queueTriggerPair = queueTriggerPairs.Find(el => el.Id == queueId);
+        queueTriggerPairs.Remove(queueTriggerPair);
+        scheduler.QueueTriggerPairs = queueTriggerPairs;
+        deamonApi.UPDATE(scheduler);
+        return "ok";
     }
 
     private string EditSchedule(string schedulerId, JObject payload)
