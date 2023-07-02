@@ -121,7 +121,7 @@ public sealed partial class PlayerController
         set
         {
             _State = value;
-            OnPropertyChanged(nameof(_State));
+            OnPropertyChanged();
         }
     }
     public Display Display { get; set; }

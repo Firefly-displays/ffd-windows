@@ -15,6 +15,7 @@ using deamon.Models;
 using Newtonsoft.Json;
 using Application = System.Windows.Application;
 using Timer = System.Threading.Timer;
+using Uri = System.Uri;
 
 namespace deamon;
 
@@ -77,6 +78,35 @@ public class SomeConverter: IValueConverter
     {
         Debug.WriteLine("SomeConverter");
         return (value as IEnumerable<QueueWithPriority>).Select(el => JsonConvert.SerializeObject(el));
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class VisibilityConverter: IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (bool)value
+            ? Visibility.Visible
+            : Visibility.Hidden;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class StatusConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if ((PlayerController.PlayerState)value == PlayerController.PlayerState.Playing) return "Play";
+        return "Pause";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using deamon.Models;
 using deamon.Views;
@@ -109,6 +110,19 @@ public class DisplaysController
     
     public void OpenPlayer(string displayId)
     {
+        Thread thread = Thread.CurrentThread;
+            
+        Debug.WriteLine("DisplaysController.OpenPlayer()");
+        Debug.WriteLine(thread.Name);
+
+        if (thread.GetApartmentState() == ApartmentState.STA)
+        {
+            Console.WriteLine("Текущий поток является STA-потоком.");
+        }
+        else
+        {
+            Console.WriteLine("Текущий поток является MTA-потоком.");
+        }
         // if (display.SchedulerEntity == null) return;
         Display display = Displays.First(d => d.Id == displayId);
         var player = new PlayerController(display);
@@ -129,6 +143,19 @@ public class DisplaysController
     
     public void StopPlayer(string displayId)
     {
+        Thread thread = Thread.CurrentThread;
+            
+        Debug.WriteLine("DisplaysController.StopPlayer()");
+        Debug.WriteLine(thread.Name);
+
+        if (thread.GetApartmentState() == ApartmentState.STA)
+        {
+            Console.WriteLine("Текущий поток является STA-потоком.");
+        }
+        else
+        {
+            Console.WriteLine("Текущий поток является MTA-потоком.");
+        }
         if (Players.All(p => p.Key.Id != displayId)) return;
         Players.First(p => p.Key.Id == displayId).Value.Stop();
         Display display = Displays.First(d => d.Id == displayId);
@@ -141,8 +168,9 @@ public class DisplaysController
         OpenPlayer(displayId);
     }
     
-    public void SkipContent(Display display)
+    public void SkipContent(string displayId)
     {
-        Players[display].SkipContent();
+        if (Players.All(p => p.Key.Id != displayId)) return;
+        Players.First(p => p.Key.Id == displayId).Value.SkipContent();
     }
 }

@@ -9,17 +9,28 @@
         WindowStartupLocation="Manual">
     <Window.Resources>
         <local:SomeConverter x:Key="SomeConverter" />
+        <local:VisibilityConverter x:Key="VisibilityConverter" />
+        <local:StatusConverter x:Key="StatusConverter" />
     </Window.Resources>
     <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding CurrentContentVideoSrc}"></TextBlock>
+            <TextBlock Text="{Binding CurrentContentImgSrc}"></TextBlock>
+            <TextBlock Text="{Binding CurrentContentIsVideo}"></TextBlock>
+            <TextBlock Text="{Binding CurrentContentIsImg}"></TextBlock>
+            <TextBlock Text="{Binding State}"></TextBlock>
+        </StackPanel>
+    
         <MediaElement
             Name="VideoElement"
-            Visibility="{Binding CurrentContentIsVideo}"
-            Source="{Binding CurrentContentSrc}"
-            LoadedBehavior="Manual"
+            Visibility="{Binding CurrentContentIsVideo, Converter={StaticResource VisibilityConverter}}"
+            Source="{Binding CurrentContentVideoSrc}"
+            LoadedBehavior="{Binding State, Converter={StaticResource StatusConverter}}"
         />
         <!-- LoadedBehavior="Manual" -->
         <Image
             x:Name="SlideElement"
-            Source="{Binding CurrentContentSrc}"/>
+            Visibility="{Binding CurrentContentIsImg, Converter={StaticResource VisibilityConverter}}"
+            Source="{Binding CurrentContentImgSrc}"/>
     </Grid>
 </Window>

@@ -51,6 +51,7 @@ public partial class RemoteClient
                     case "post": Post(jsonMsg); break;
                     case "update": Update(jsonMsg); break;
                     case "delete": Delete(jsonMsg); break;
+                    case "signal": HandleSignal(jsonMsg); break;
                     case "iceCandidate": HandleIceCandidate(jsonMsg); break;
                     case "offer": HandleOffer(jsonMsg); break;
                 }

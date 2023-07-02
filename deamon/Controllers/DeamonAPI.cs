@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using deamon.Entities;
 using deamon.Models;
 
@@ -48,13 +50,38 @@ public class DeamonAPI: IDeamonAPI
         (EntityModels[typeof(T).Name] as EntityModel<T>)!.Delete(id);
     }
 
+    public void RunDisplay(string displayId)
+    {
+        try { DisplaysController.OpenPlayer(displayId); }
+        catch (Exception e) { Debug.WriteLine(e); }
+    }
+
+    public void StopDisplay(string displayId)
+    {
+        try
+        {
+            DisplaysController.StopPlayer(displayId);
+            
+            
+            Thread thread = Thread.CurrentThread;
+            
+            Debug.WriteLine("DeamonAPI.StopDisplay()");
+            Debug.WriteLine(thread.Name);
+
+            if (thread.GetApartmentState() == ApartmentState.STA)
+            {
+                Console.WriteLine("Текущий поток является STA-потоком.");
+            }
+            else
+            {
+                Console.WriteLine("Текущий поток является MTA-потоком.");
+            }
+        }
+        catch (Exception e) { Debug.WriteLine(e); }
+    }
+
     public void RestartDisplay(string displayId) => DisplaysController.Restart(displayId);
     public void PauseDisplay(string displayId) => DisplaysController.PausePlayer(displayId);
     public void ResumeDisplay(string displayId) => DisplaysController.ResumePlayer(displayId);
-
-    public void SkipContent(string displayId)
-    {
-        var display = GET<Display>(displayId);
-        DisplaysController.SkipContent(display);
-    }
+    public void SkipContent(string displayId) => DisplaysController.SkipContent(displayId);
 }
