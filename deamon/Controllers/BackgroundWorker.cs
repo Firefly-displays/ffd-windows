@@ -8,6 +8,18 @@ namespace deamon;
 
 public class BackgroundWorker : IBackgroundWorker
 {
+    public static BackgroundWorker Instance;
+    
+    public static BackgroundWorker GetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = new BackgroundWorker();
+        }
+
+        return Instance;
+    }
+    
     private DisplaysController displaysController;
     
     public DeamonAPI API;
@@ -15,19 +27,10 @@ public class BackgroundWorker : IBackgroundWorker
 
     public BackgroundWorker()
     {
-        displaysController = new();
-
-        var d = new Dictionary<string, object>();
-        
-        d.Add("Display", new EntityModel<Display>());
-        d.Add("Content", new EntityModel<Content>());
-        d.Add("Queue", new EntityModel<Queue>());
-        d.Add("SchedulerEntity", new EntityModel<SchedulerEntity>());
-        
-        API = new DeamonAPI(d, displaysController);
+        displaysController = DisplaysController.GetInstance();
+        API = DeamonAPI.GetInstance();
+        remoteClient = RemoteClient.GetInstance();
         Start();
-
-        remoteClient = new RemoteClient(API);
     }
 
     public void Start()

@@ -17,9 +17,7 @@ namespace deamon
             Hide();
             NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources", "Icon.ico"));
 
-            _bw = new BackgroundWorker();
-
-            // var mvm = new MyViewModel();
+            _bw = BackgroundWorker.GetInstance();
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)

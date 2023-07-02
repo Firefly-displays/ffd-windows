@@ -10,19 +10,32 @@ namespace deamon;
 
 public class DeamonAPI: IDeamonAPI
 {
+    private static DeamonAPI Instance;
+    
+    public static DeamonAPI GetInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = new DeamonAPI();
+        }
+
+        return Instance;
+    }
+    
     private readonly Dictionary<string, object> EntityModels;
     private DisplaysController DisplaysController { get; set; }
 
-    public DeamonAPI(Dictionary<string, object> EntityModels, DisplaysController displaysController)
+    private DeamonAPI()
     {
-        // if (EntityModels.Any(x => x.Value.GetType().BaseType != typeof(EntityModel<>)))
-        // {
-        //     throw new ArgumentException("EntityModels must be a dictionary of type <string, EntityModel<>> but got " +
-        //                                 "dictionary of type <string, " + EntityModels.First(x => x.Value.GetType().BaseType != typeof(EntityModel<>)).Value.GetType().Name + ">");
-        // }
+        var d = new Dictionary<string, object>();
+
+        d.Add("Display", EntityModel<Display>.GetInstance());
+        d.Add("Content", EntityModel<Content>.GetInstance());
+        d.Add("Queue", EntityModel<Queue>.GetInstance());
+        d.Add("SchedulerEntity", EntityModel<SchedulerEntity>.GetInstance());
         
-        this.EntityModels = EntityModels;
-        this.DisplaysController = displaysController;
+        this.EntityModels = d;
+        this.DisplaysController = DisplaysController.GetInstance();
     }
     
     public List<T> GET<T>() where T: Entity

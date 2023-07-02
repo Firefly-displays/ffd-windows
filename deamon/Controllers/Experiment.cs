@@ -18,6 +18,7 @@ using Quartz.Impl;
 using Quartz.Impl.AdoJobStore;
 using Quartz.Simpl;
 using Quartz.Xml.JobSchedulingData20;
+using QueueTriggerPair = deamon.Entities.QueueTriggerPair;
 
 namespace deamon;
 
@@ -26,46 +27,68 @@ public static class Experiment
     public static void GetDeviceInfo()
     {
         var d = new Dictionary<string, object>();
-        
-        d.Add("Display", new EntityModel<Display>());
-        d.Add("Content", new EntityModel<Content>());
-        d.Add("Queue", new EntityModel<Queue>());
-        d.Add("SchedulerEntity", new EntityModel<SchedulerEntity>());
-        
-        var API = new DeamonAPI(d, new DisplaysController());
-        
-        var queues = new List<Queue>()
-        {
-            new Queue("123", new List<Content>() {API.GET<Content>()[0]}),
-            new Queue("3211", API.GET<Content>()),
-        };
-        foreach (Queue queue in queues)
-        {
-            API.POST(queue);
-        }
 
-        // var data = API.GET<Queue>();
+        d.Add("Display", EntityModel<Display>.GetInstance());
+        d.Add("Content", EntityModel<Content>.GetInstance());
+        d.Add("Queue", EntityModel<Queue>.GetInstance());
+        d.Add("SchedulerEntity", EntityModel<SchedulerEntity>.GetInstance());
 
-        // var m = new EntityModel<Queue>();
+        var API = DeamonAPI.GetInstance();
+
+        // var queues = API.GET<Queue>();
         //
-        // Debug.WriteLine(JsonConvert.SerializeObject(m));
-
-        // var m = new EntityModel<Queue>();
-        // var q = new Queue("first");
-        // var q2 = new Queue("second");
-
-        // var q = new Queue("хуй");
-        // var s = JsonConvert.SerializeObject(q);
-        // Debug.WriteLine(s);
-        // var q2 = JsonConvert.DeserializeObject<Some>(s);
-        // Debug.WriteLine(q2.Name);
-
-        // var q = new Queue("123213123");
+        // var schedulerEntities = new List<SchedulerEntity>()
+        // {
+        //     new SchedulerEntity("1", new List<QueueTriggerPair>()
+        //     {
+        //         new(queues[0], "0 15,30,45 * ? * *", null, 10, 1),
+        //         new(queues[1], "0 0 10-18 ? 1-1 3#2 *", null, 60 * 20, 2),
+        //         new(queues[2], "0 0 */2 ? * *", null, 60 * 60 * 2, 3),
+        //     }),
+        //     new SchedulerEntity("2", new List<QueueTriggerPair>()
+        //     {
+        //         new(queues[0], "0 15,30,45 * ? * *", null, 10, 1),
+        //         new(queues[1], "0 0 10-18 ? 1-1 3#2 *", null, 60 * 20, 2),
+        //         new(queues[2], "0 0 */2 ? * *", null, 60 * 60 * 2, 3),
+        //     }),
+        // };
         //
-        // var s = JsonConvert.SerializeObject(q);
-        // Debug.WriteLine(s);
-        // var q2 = JsonConvert.DeserializeObject<Queue>(s);
-        // Debug.WriteLine(q2.Name);
+        // foreach (SchedulerEntity schedulerEntity in schedulerEntities)
+        // {
+        //     API.POST(schedulerEntity);
+        // }
+        //
+        // Debug.WriteLine(JsonConvert.SerializeObject(API.GET<SchedulerEntity>()));
+        // Debug.WriteLine("========================================");
+        //
+        // var scheduler = API.GET<SchedulerEntity>().First();
+        // scheduler.Name = "Основной планировщик";
+        // scheduler.QueueTriggerPairs.Add(new(queues[0], "0 45 * ? * *", null, 10, 1));
+        //
+        // var someId = scheduler.QueueTriggerPairs.First().Id;
+        // var qtp = scheduler.QueueTriggerPairs.First(el => el.Id == someId);
+        // qtp.Cron = null;
+        // qtp.EmitTime = DateTime.Now;
+        // qtp.Priority = 100;
+        //
+        // Debug.WriteLine(someId);
+        // Debug.WriteLine("========================================");
+        //
+        // API.UPDATE(scheduler);
+        
+        // var first = API.GET<SchedulerEntity>().First();
+        // API.DELETE<SchedulerEntity>(first.Id);
+        //
+        // Debug.WriteLine(JsonConvert.SerializeObject(API.GET<SchedulerEntity>()));
+
+        var someList = new List<int>() { 1, 2, 3, 4, 5 };
+        
+        var element = someList.First(el => el == 3);
+        var index = someList.FindIndex(el => el == 3);    
+        someList.RemoveAt(index);
+        someList.Insert(index-1, element);
+        
+        Debug.WriteLine(JsonConvert.SerializeObject(someList));
     }
 }
 

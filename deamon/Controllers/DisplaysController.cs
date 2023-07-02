@@ -14,15 +14,27 @@ namespace deamon;
 
 public class DisplaysController
 {
+    private static DisplaysController _instance;
+    
+    public static DisplaysController GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new DisplaysController();
+        }
+
+        return _instance;
+    }
+    
     private EntityModel<Display> DisplaysDM;
     private ObservableCollection<Display> Displays;
     
     private Dictionary<Display, PlayerController> Players = new();
 
-    public DisplaysController()
+    private DisplaysController()
     {
         Players = new Dictionary<Display, PlayerController>();
-        DisplaysDM = new EntityModel<Display>();
+        DisplaysDM = EntityModel<Display>.GetInstance();
         Displays = DisplaysDM.Data;
         Sync();
         
@@ -110,19 +122,6 @@ public class DisplaysController
     
     public void OpenPlayer(string displayId)
     {
-        Thread thread = Thread.CurrentThread;
-            
-        Debug.WriteLine("DisplaysController.OpenPlayer()");
-        Debug.WriteLine(thread.Name);
-
-        if (thread.GetApartmentState() == ApartmentState.STA)
-        {
-            Console.WriteLine("Текущий поток является STA-потоком.");
-        }
-        else
-        {
-            Console.WriteLine("Текущий поток является MTA-потоком.");
-        }
         // if (display.SchedulerEntity == null) return;
         Display display = Displays.First(d => d.Id == displayId);
         var player = new PlayerController(display);
@@ -143,19 +142,6 @@ public class DisplaysController
     
     public void StopPlayer(string displayId)
     {
-        Thread thread = Thread.CurrentThread;
-            
-        Debug.WriteLine("DisplaysController.StopPlayer()");
-        Debug.WriteLine(thread.Name);
-
-        if (thread.GetApartmentState() == ApartmentState.STA)
-        {
-            Console.WriteLine("Текущий поток является STA-потоком.");
-        }
-        else
-        {
-            Console.WriteLine("Текущий поток является MTA-потоком.");
-        }
         if (Players.All(p => p.Key.Id != displayId)) return;
         Players.First(p => p.Key.Id == displayId).Value.Stop();
         Display display = Displays.First(d => d.Id == displayId);

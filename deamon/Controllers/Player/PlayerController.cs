@@ -24,67 +24,10 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         Display = display;
         State = PlayerState.Playing;
         CurrentQueues = new ObservableCollection<QueueWithPriority>();
-        var schedulerConfigs = new EntityModel<SchedulerEntity>().Data
+        var schedulerConfigs = EntityModel<SchedulerEntity>.GetInstance().Data
             .Where(x => x.Id == display.SchedulerEntityId);
 
-        if (!schedulerConfigs.Any())
-        {
-            return;
-            // var basePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources");
-            // var queues = new List<Queue>()
-            // {
-            //     new Queue("first", new List<Content>()
-            //     {
-            //         // new (
-            //         //     Content.ContentType.Image,
-            //         //     basePath + @"\Images\123.jpg",
-            //         //     1),
-            //         new ("12",
-            //             Content.ContentType.Image,
-            //             basePath + @"\Images\1.jpg",
-            //             null, 1),
-            //         new Content("123",
-            //             Content.ContentType.Video,
-            //             basePath + @"\Video\1.mp4", null
-            //         ),
-            //         // new Content(
-            //         //     Content.ContentType.Video,
-            //         //     basePath + @"\Video\3.mp4"
-            //         // )
-            //     }),
-            //     new Queue("second", new List<Content>()
-            //     {
-            //         new Content("1234",
-            //             Content.ContentType.Video,
-            //             basePath + @"\Video\a1.mp4", null
-            //         )
-            //     })
-            // };
-            //
-            // schedulerConfig = new SchedulerConfig("default", "default",
-            //     new List<QueueTriggerPair>()
-            //     {
-            //         new QueueTriggerPair(queues[0], new List<TriggerConfig>()
-            //         {
-            //             new TriggerConfig("some_date", DateTime.Now.AddSeconds(5))
-            //         }, 1*60, 1),
-            //         // new QueueTriggerPair(queues[1], new List<TriggerConfig>()
-            //         // {
-            //         //     new TriggerConfig("some_date2", DateTime.Now.AddSeconds(7))
-            //         // }, 10, 0),
-            //         // new QueueTriggerPair(queues[1], new List<TriggerConfig>()
-            //         // {
-            //         //     new TriggerConfig("every_10_sec", "0 0/2 * * * ?"),
-            //         //     new TriggerConfig("every_15_sec", "0 0/3 * * * ?")
-            //         // }, 1, 2)
-            //     }, new Queue("defaultQueue", new List<Content>()
-            //     {
-            //         new ("789",
-            //             Content.ContentType.Image,
-            //             basePath + @"\Images\1623540080_32-phonoteka_org-p-abstraktsiya-karandashom-oboi-krasivo-32.jpg",
-            //             null, 5)
-            //     }));
-        }
+        if (!schedulerConfigs.Any()) { return; }
         
         var schedulerConfig = schedulerConfigs.First();
         DefaultQueue = schedulerConfig.DefaultQueue;

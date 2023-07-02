@@ -13,15 +13,27 @@ namespace deamon;
 
 public partial class RemoteClient
 {
+    private static RemoteClient? instance;
+    
+    public static RemoteClient GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new RemoteClient();
+        }
+
+        return instance;
+    }
+    
     private WebSocket ws = new("ws://localhost:6969");
     private PeerConnection pc = new();
     private DeamonAPI deamonApi;
     private string saveFilePath;
     private FileStream saveFileStream;
 
-    public RemoteClient(DeamonAPI api)
+    public RemoteClient()
     {
-        deamonApi = api;
+        deamonApi = DeamonAPI.GetInstance();
         
         ws.OnOpen += (sender, e) =>
         {
