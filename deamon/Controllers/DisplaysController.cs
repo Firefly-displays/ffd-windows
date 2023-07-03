@@ -100,7 +100,7 @@ public class DisplaysController
         {
             Debug.WriteLine("RunOnline");
             foreach (var display in this.Displays
-                         .Where(d => d.Status == Display.DisplayStatus.Online))
+                         .Where(d => d.Status == Display.DisplayStatus.Online && d.SchedulerEntityId != null))
             {
                 OpenPlayer(display.Id);
             }

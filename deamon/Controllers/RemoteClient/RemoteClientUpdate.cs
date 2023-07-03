@@ -103,6 +103,22 @@ public partial class RemoteClient
                 }
                 
                 break;
+            case "display":
+                var display = deamonApi.GET<Display>(id);
+                
+                switch (action)
+                {
+                    case "changeScheduler":
+                        try
+                        {
+                            if ((string)payload["schedulerId"]! == "null") display.SchedulerEntityId = null;
+                            else display.SchedulerEntityId = (string)payload["schedulerId"]!;
+                            result = "ok";
+                        }
+                        catch (Exception e) { result = "error"; } break;
+                }
+
+                break;
         }
         
         WSSend(new JObject()
