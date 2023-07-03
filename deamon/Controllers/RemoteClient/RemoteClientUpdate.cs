@@ -79,7 +79,11 @@ public partial class RemoteClient
                 switch (action)
                 {
                     case "changeDefaultQueue":
-                        try { scheduler.DefaultQueue = deamonApi.GET<Queue>((string)payload["defaultQueue"]!); }
+                        try
+                        {
+                            if ((string)payload["defaultQueue"]! == "null") scheduler.DefaultQueue = null;
+                            else scheduler.DefaultQueue = deamonApi.GET<Queue>((string)payload["defaultQueue"]!);
+                        }
                         catch (Exception e) { result = "error"; } break;
                     case "schedule":
                         try { result = Schedule(id, payload); }

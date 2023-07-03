@@ -16,8 +16,8 @@ public class SchedulerEntity : Entity
     public string Name { get => _Name; set => SetField(ref _Name, value); }
     private string _Name;
     
-    public Queue DefaultQueue { get => _DefautlQueue; set => SetField(ref _DefautlQueue, value); }
-    private Queue _DefautlQueue;
+    public Queue? DefaultQueue { get => _DefautlQueue; set => SetField(ref _DefautlQueue, value); }
+    private Queue? _DefautlQueue;
     
     public List<QueueTriggerPair> QueueTriggerPairs
     {

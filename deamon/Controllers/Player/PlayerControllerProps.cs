@@ -15,9 +15,9 @@ public sealed partial class PlayerController
     private IScheduler _scheduler;
     
     private ObservableCollection<QueueWithPriority> CurrentQueues;
-    private Queue CurrentQueue { get; set; }
+    private Queue? CurrentQueue { get; set; }
     
-    private Queue DefaultQueue { get; set; }
+    private Queue? DefaultQueue { get; set; }
 
     private Content _CurrectContent;
 
