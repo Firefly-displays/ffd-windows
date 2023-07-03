@@ -22,18 +22,25 @@ public sealed partial class PlayerController
             
         foreach (var queueTriggerPair in schedulerEntity.QueueTriggerPairs)
         {
-            var job = CreateJob(
-                queueTriggerPair.Queue, 
-                queueTriggerPair.Duration,
-                queueTriggerPair.Priority);
-            var trigger = CreateTrigger(new TriggerConfig(
-                Guid.NewGuid().ToString(),
-                queueTriggerPair.Cron, 
-                queueTriggerPair.EmitTime,
-                queueTriggerPair.Cron != null 
-                    ? TriggerConfig.TriggerType.Cron 
-                    : TriggerConfig.TriggerType.OneTime));
-            await scheduler.ScheduleJob(job, trigger);
+            try
+            {
+                var job = CreateJob(
+                    queueTriggerPair.Queue,
+                    queueTriggerPair.Duration,
+                    queueTriggerPair.Priority);
+                var trigger = CreateTrigger(new TriggerConfig(
+                    Guid.NewGuid().ToString(),
+                    queueTriggerPair.Cron,
+                    queueTriggerPair.EmitTime,
+                    queueTriggerPair.Cron != null
+                        ? TriggerConfig.TriggerType.Cron
+                        : TriggerConfig.TriggerType.OneTime));
+                await scheduler.ScheduleJob(job, trigger);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
         
         await scheduler.Start();

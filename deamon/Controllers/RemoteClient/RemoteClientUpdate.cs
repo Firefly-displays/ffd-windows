@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
@@ -89,6 +90,12 @@ public partial class RemoteClient
                     case "dropQueue":
                         try { result = DropQueue(id, (string)payload["itemId"]!); }
                         catch (Exception e) { result = "error"; } break;
+                    case "upQueue":
+                        try { result = UpQueue(id, (string)payload["itemId"]!); }
+                        catch (Exception e) { Debug.WriteLine(e); result = "error"; } break;
+                    case "downQueue":
+                        try { result = DownQueue(id, (string)payload["itemId"]!); }
+                        catch (Exception e) { Debug.WriteLine(e); result = "error"; } break;
                 }
                 
                 break;
@@ -102,12 +109,62 @@ public partial class RemoteClient
         }.ToString());
     }
     
+    private string UpQueue(string schedulerId, string queueId)
+    {
+        var scheduler = deamonApi.GET<SchedulerEntity>(schedulerId);
+        var queueTriggerPairs = new List<QueueTriggerPair>();
+
+        var item = scheduler.QueueTriggerPairs.Find(el => el.Id == queueId);
+        if (item.Priority == 0) return "error";
+        var upper = scheduler.QueueTriggerPairs.Find(el => el.Priority == item.Priority - 1);
+        
+        item.Priority -= 1;
+        upper.Priority += 1;
+        
+        foreach (var el in scheduler.QueueTriggerPairs)
+        {
+            queueTriggerPairs.Add(el);
+        }
+        
+        scheduler.QueueTriggerPairs = queueTriggerPairs;
+        deamonApi.UPDATE(scheduler);
+        return "ok";
+    }
+    
+    private string DownQueue(string schedulerId, string queueId)
+    {
+        var scheduler = deamonApi.GET<SchedulerEntity>(schedulerId);
+        var queueTriggerPairs = new List<QueueTriggerPair>();
+
+        var item = scheduler.QueueTriggerPairs.First(el => el.Id == queueId);
+        if (item.Priority == scheduler.QueueTriggerPairs
+                .OrderByDescending(e => e.Priority).First().Priority) return "error";
+        var lower = scheduler.QueueTriggerPairs.First(el => el.Priority == item.Priority + 1);
+        
+        item.Priority += 1;
+        lower.Priority -= 1;
+        
+        foreach (var el in scheduler.QueueTriggerPairs)
+        {
+            queueTriggerPairs.Add(el);
+        }
+
+        scheduler.QueueTriggerPairs = queueTriggerPairs;
+        deamonApi.UPDATE(scheduler);
+        return "ok";
+    }
+    
     private string DropQueue(string schedulerId, string queueId)
     {
         var scheduler = deamonApi.GET<SchedulerEntity>(schedulerId);
         var queueTriggerPairs = scheduler.QueueTriggerPairs;
         var queueTriggerPair = queueTriggerPairs.Find(el => el.Id == queueId);
+        var currentPriority = queueTriggerPair.Priority;
         queueTriggerPairs.Remove(queueTriggerPair);
+        foreach (var el in queueTriggerPairs)
+        {
+            if (el.Priority > currentPriority) el.Priority -= 1;
+        }
         scheduler.QueueTriggerPairs = queueTriggerPairs;
         deamonApi.UPDATE(scheduler);
         return "ok";
