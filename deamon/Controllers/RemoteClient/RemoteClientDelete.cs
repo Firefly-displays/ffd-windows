@@ -1,4 +1,5 @@
 ﻿using System;
+using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json.Linq;
 
@@ -19,6 +20,9 @@ public partial class RemoteClient
             {
                 case "queue":
                     deamonApi.DELETE<Queue>(id);
+                    break;
+                case "scheduler":
+                    deamonApi.DELETE<SchedulerEntity>(id);
                     break;
             }
         }
