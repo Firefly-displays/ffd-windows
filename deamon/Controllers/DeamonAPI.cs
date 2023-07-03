@@ -56,11 +56,86 @@ public class DeamonAPI: IDeamonAPI
     public void UPDATE<T>(T entity) where T : Entity
     {
         (EntityModels[typeof(T).Name] as EntityModel<T>)!.Update(entity);
+
+        var id = entity.Id;
+        
+        if (typeof(T) == typeof(Queue))
+        {
+            foreach (var schedulerEntity in GET<SchedulerEntity>())
+            {
+                if (schedulerEntity.DefaultQueue?.Id == id)
+                {
+                    schedulerEntity.DefaultQueue = entity as Queue;
+                    UPDATE(schedulerEntity);
+                }
+
+                foreach (var el in schedulerEntity.QueueTriggerPairs)
+                {
+                    if (el.Queue.Id == id)
+                    {
+                        el.Queue = entity as Queue;
+                        UPDATE(schedulerEntity);
+                    }
+                }
+            }
+        }
+        
+        else if (typeof(T) == typeof(Content))
+        {
+            foreach (var queue in GET<Queue>())
+            {
+                for (var i = 0; i < queue.ContentList.Count; i++)
+                {
+                    var content = queue.ContentList[i];
+                    if (content.Id == id)
+                    {
+                        content = entity as Content;
+                        UPDATE(queue);
+                    }
+                }
+            }
+        }
     }
 
     public void DELETE<T>(string id) where T : Entity
     {
         (EntityModels[typeof(T).Name] as EntityModel<T>)!.Delete(id);
+
+        if (typeof(T) == typeof(SchedulerEntity))
+        {
+            foreach (var display in GET<Display>())
+            {
+                if (display.SchedulerEntityId == id)
+                {
+                    display.SchedulerEntityId = null;
+                    UPDATE(display);
+                }
+            }
+        }
+
+        if (typeof(T) == typeof(Queue))
+        {
+            foreach (var schedulerEntity in GET<SchedulerEntity>())
+            {
+                schedulerEntity.QueueTriggerPairs = schedulerEntity.QueueTriggerPairs
+                    .Where(x => x.Queue.Id != id).ToList();
+                if (schedulerEntity.DefaultQueue?.Id == id)
+                {
+                    schedulerEntity.DefaultQueue = null;
+                }
+                UPDATE(schedulerEntity);
+            }
+        }
+        
+        if (typeof(T) == typeof(Content))
+        {
+            foreach (var queue in GET<Queue>())
+            {
+                queue.ContentList = queue.ContentList
+                    .Where(x => x.Id != id).ToList();
+                UPDATE(queue);
+            }
+        }
     }
 
     public void RunDisplay(string displayId)
