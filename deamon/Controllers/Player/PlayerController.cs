@@ -70,7 +70,9 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             catch (Exception exception)
             {
                 Debug.WriteLine(exception);
+                Logger.Log(exception.ToString());
                 Debug.WriteLine(JsonConvert.SerializeObject(CurrentQueues));
+                Logger.Log(JsonConvert.SerializeObject(CurrentQueues));
             }
         }
         else
@@ -90,7 +92,9 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         IsQueueChanged = false;
         
         Debug.WriteLine("PickContent");
+        Logger.Log("PickContent");
         Debug.WriteLine(JsonConvert.SerializeObject(CurrentContent.Path));
+        Logger.Log(JsonConvert.SerializeObject(CurrentContent.Path));
         
         RemoteClient.GetInstance().WSSend(new JObject()
         {

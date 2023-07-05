@@ -13,11 +13,19 @@ namespace deamon
 
         public MainWindow()
         {
-            InitializeComponent();
-            Hide();
-            NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources", "Icon.ico"));
+            try
+            {
+                InitializeComponent();
+                Hide();
+                NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Icon.ico"));
 
-            _bw = BackgroundWorker.GetInstance();
+                _bw = BackgroundWorker.GetInstance();
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.ToString());
+            }
+            
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)

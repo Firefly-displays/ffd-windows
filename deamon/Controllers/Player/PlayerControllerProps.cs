@@ -32,7 +32,7 @@ public sealed partial class PlayerController
                 CurrentContentVideoSrc = value.Path;
                 CurrentContentImgSrc =  Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory,
-                    "../../../Resources/black.jpg");
+                    "black.jpg");
             }
             else
             {

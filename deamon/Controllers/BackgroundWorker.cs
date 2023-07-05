@@ -27,6 +27,7 @@ public class BackgroundWorker : IBackgroundWorker
 
     public BackgroundWorker()
     {
+        Setuper.Setup();
         displaysController = DisplaysController.GetInstance();
         API = DeamonAPI.GetInstance();
         remoteClient = RemoteClient.GetInstance();

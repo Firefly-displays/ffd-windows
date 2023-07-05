@@ -19,26 +19,32 @@ public partial class RemoteClient
             case "pause":
                 deamonApi.PauseDisplay(displayId);
                 Debug.WriteLine("pause");
+                Logger.Log("pause");
                 break;
             case "resume":
                 deamonApi.ResumeDisplay(displayId);
                 Debug.WriteLine("resume");
+                Logger.Log("resume");
                 break;
             case "next":
                 deamonApi.SkipContent(displayId);
                 Debug.WriteLine("next");
+                Logger.Log("next");
                 break;
             case "restart":
                 // deamonApi.RestartDisplay(displayId);
                 Debug.WriteLine("restart");
+                Logger.Log("restart");
                 break;
             case "run":
                 // deamonApi.RunDisplay(displayId);
                 Debug.WriteLine("run");
+                Logger.Log("run");
                 break;
             case "stop":
                 // deamonApi.StopDisplay(displayId);
                 Debug.WriteLine("stop");
+                Logger.Log("stop");
                 break;
         }
         

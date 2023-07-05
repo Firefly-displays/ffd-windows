@@ -76,7 +76,6 @@ public class SomeConverter: IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        Debug.WriteLine("SomeConverter");
         return (value as IEnumerable<QueueWithPriority>).Select(el => JsonConvert.SerializeObject(el));
     }
 

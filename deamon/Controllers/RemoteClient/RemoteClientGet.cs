@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using deamon.Entities;
@@ -20,6 +21,14 @@ public partial class RemoteClient
 
         switch (entity)
         {
+            case "logs":
+                WSSend(new JObject()
+                {
+                    { "type", "response" },
+                    { "requestId", requestId },
+                    { "payload", Logger.GetLogs() }
+                }.ToString());
+                return;
             case "display":
                 var displays = id == "*" 
                     ? deamonApi.GET<Display>() 
@@ -55,8 +64,6 @@ public partial class RemoteClient
                 if (id == "*")
                 {
                     var queues = deamonApi.GET<Queue>();
-                    Debug.WriteLine("fetching queues");
-                    Debug.WriteLine(queues.Count);
                     foreach (var queue in queues)
                     {
                         result.Add(new()

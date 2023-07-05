@@ -89,6 +89,7 @@ public static class Experiment
         someList.Insert(index-1, element);
         
         Debug.WriteLine(JsonConvert.SerializeObject(someList));
+        Logger.Log(JsonConvert.SerializeObject(someList));
     }
 }
 

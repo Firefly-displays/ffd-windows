@@ -40,6 +40,7 @@ public sealed partial class PlayerController
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+                Logger.Log(e.ToString());
             }
         }
         
@@ -96,9 +97,11 @@ public class ShowContentJob: IJob
         {
             var queueWithPriority = new QueueWithPriority(queue, priority, true);
             Debug.WriteLine(DateTime.Now + " - ContentJob is running " + queue?.Name); 
+            Logger.Log(DateTime.Now + " - ContentJob is running " + queue?.Name);
             currentQueues.Add(queueWithPriority);
             System.Threading.Thread.Sleep(1000 * duration);
             Debug.WriteLine(DateTime.Now + " - ContentJob ended " + queue?.Name);
+            Logger.Log(DateTime.Now + " - ContentJob ended " + queue?.Name);
             currentQueues.Remove(queueWithPriority);
         }
 

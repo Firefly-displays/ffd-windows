@@ -68,7 +68,7 @@ public class EntityModel<T> where T : Entity
         Data.Remove(Data.First(x => x.Id == id));
     }
 
-    private readonly string configPath = @"C:\Users\onere\Documents\VideoQueue\deamon\deamon\Resources\" + typeof(T).Name + ".json";
+    private readonly string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", typeof(T).Name + ".json");
     
     private EntityModel()
     {
