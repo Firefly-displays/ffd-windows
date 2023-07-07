@@ -32,17 +32,17 @@ public partial class RemoteClient
                 Logger.Log("next");
                 break;
             case "restart":
-                // deamonApi.RestartDisplay(displayId);
+                deamonApi.RestartDisplay(displayId);
                 Debug.WriteLine("restart");
                 Logger.Log("restart");
                 break;
             case "run":
-                // deamonApi.RunDisplay(displayId);
+                deamonApi.RunDisplay(displayId);
                 Debug.WriteLine("run");
                 Logger.Log("run");
                 break;
             case "stop":
-                // deamonApi.StopDisplay(displayId);
+                deamonApi.StopDisplay(displayId);
                 Debug.WriteLine("stop");
                 Logger.Log("stop");
                 break;
