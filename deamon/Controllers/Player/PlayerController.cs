@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
@@ -109,9 +110,12 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     public void Play()
     {
-        this.PlayerView = new Player(Display, ContentIsDone);
-        PlayerView.DataContext = this;
-        PlayerView.Show();
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            this.PlayerView = new Player(Display, ContentIsDone);
+            PlayerView.DataContext = this;
+            PlayerView.Show();
+        });
     }
 
     private Player PlayerView { get; set; }
@@ -126,7 +130,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     public void Stop()
     {
-        PlayerView.Close();
+        PlayerView.Dispatcher.Invoke(() => PlayerView.Close());
     }
 
     public void SkipContent()

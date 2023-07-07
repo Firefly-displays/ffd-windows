@@ -29,15 +29,15 @@ public partial class RemoteClient
                 Debug.WriteLine("next");
                 break;
             case "restart":
-                // deamonApi.RestartDisplay(displayId);
+                deamonApi.RestartDisplay(displayId);
                 Debug.WriteLine("restart");
                 break;
             case "run":
-                // deamonApi.RunDisplay(displayId);
+                deamonApi.RunDisplay(displayId);
                 Debug.WriteLine("run");
                 break;
             case "stop":
-                // deamonApi.StopDisplay(displayId);
+                deamonApi.StopDisplay(displayId);
                 Debug.WriteLine("stop");
                 break;
         }
