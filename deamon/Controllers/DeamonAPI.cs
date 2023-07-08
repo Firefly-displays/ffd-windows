@@ -140,8 +140,15 @@ public class DeamonAPI: IDeamonAPI
 
     public void RunDisplay(string displayId)
     {
-        try { DisplaysController.OpenPlayer(displayId); }
-        catch (Exception e) { Debug.WriteLine(e); }
+        try
+        {
+            DisplaysController.OpenPlayer(displayId);
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            Logger.Log(e.ToString());
+        }
     }
 
     public void StopDisplay(string displayId)
@@ -149,12 +156,14 @@ public class DeamonAPI: IDeamonAPI
         try
         {
             DisplaysController.StopPlayer(displayId);
-            
-            
+
+
             Thread thread = Thread.CurrentThread;
-            
+
             Debug.WriteLine("DeamonAPI.StopDisplay()");
             Debug.WriteLine(thread.Name);
+            Logger.Log("DeamonAPI.StopDisplay()");
+
 
             if (thread.GetApartmentState() == ApartmentState.STA)
             {
@@ -165,7 +174,11 @@ public class DeamonAPI: IDeamonAPI
                 Console.WriteLine("Текущий поток является MTA-потоком.");
             }
         }
-        catch (Exception e) { Debug.WriteLine(e); }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+            Logger.Log(e.ToString());
+        }
     }
 
     public void RestartDisplay(string displayId) => DisplaysController.Restart(displayId);

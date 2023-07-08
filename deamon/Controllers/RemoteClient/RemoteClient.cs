@@ -38,14 +38,20 @@ public partial class RemoteClient
         ws.OnOpen += (sender, e) =>
         {
             Debug.WriteLine("Соединение ws установлено");
+            Logger.Log("Соединение ws установлено");
             ws.Send("{\"type\":\"connection\",\"role\":\"host\",\"hostID\":\"123\",\"hostPassword\":\"123\"}");
         };
 
-        ws.OnClose += (sender, e) => { Debug.WriteLine("Соединение ws закрыто"); };
+        ws.OnClose += (sender, e) =>
+        {
+            Debug.WriteLine("Соединение ws закрыто");
+            Logger.Log("Соединение ws закрыто");
+        };
 
         ws.OnError += (sender, e) =>
         {
             Debug.WriteLine("Ошибка ws: " + e.Message);
+            Logger.Log("Ошибка ws: " + e.Message);
         };
 
         ws.OnMessage += async (sender, e) =>
@@ -55,6 +61,7 @@ public partial class RemoteClient
                 var msg = e.Data;
 
                 Debug.WriteLine($"web socket recv: {msg.Length} bytes");
+                Logger.Log($"web socket recv: {msg.Length} bytes");
                 JObject jsonMsg = JObject.Parse(msg);
 
                 switch ((string)jsonMsg["type"]!)
@@ -68,7 +75,11 @@ public partial class RemoteClient
                     case "offer": HandleOffer(jsonMsg); break;
                 }
             }
-            catch (Exception exception) { Debug.WriteLine(exception); }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+                Logger.Log(exception.ToString());
+            }
         };
         
         ws.Connect();

@@ -30,6 +30,14 @@ public partial class RemoteClient
                     { "payload", c.GetBaseThumb() }
                 }.ToString());
                 break;
+            case "logs":
+                WSSend(new JObject()
+                {
+                    { "type", "response" },
+                    { "requestId", requestId },
+                    { "payload", Logger.GetLogs() }
+                }.ToString());
+                return;
             case "display":
                 var displays = id == "*" 
                     ? deamonApi.GET<Display>() 

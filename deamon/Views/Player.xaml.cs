@@ -32,10 +32,8 @@ public partial class Player : Window
         WindowState = WindowState.Normal;
         Left = display.Bounds[1];
         Top = display.Bounds[0];
-        Width = 500;
-        Height = 300;
-        // Width = display.Bounds[2];
-        // Height = display.Bounds[3];
+        Width = display.Bounds[2];
+        Height = display.Bounds[3];
 
         // var controller = new CoreAudioController();
         // controller.SetDefaultDevice(audioDevice);
@@ -76,7 +74,6 @@ public class SomeConverter: IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        Debug.WriteLine("SomeConverter");
         return (value as IEnumerable<QueueWithPriority>).Select(el => JsonConvert.SerializeObject(el));
     }
 

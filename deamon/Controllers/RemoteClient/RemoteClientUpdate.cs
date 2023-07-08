@@ -66,6 +66,7 @@ public partial class RemoteClient
                         catch (Exception e)
                         {
                             Debug.WriteLine(e);
+                            Logger.Log(e.ToString());
                             result = "error";
                         } break;
                 }
@@ -84,22 +85,63 @@ public partial class RemoteClient
                             if ((string)payload["defaultQueue"]! == "null") scheduler.DefaultQueue = null;
                             else scheduler.DefaultQueue = deamonApi.GET<Queue>((string)payload["defaultQueue"]!);
                         }
-                        catch (Exception e) { result = "error"; } break;
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                     case "schedule":
-                        try { result = Schedule(id, payload); }
-                        catch (Exception e) { result = "error"; } break;
+                        try
+                        {
+                            result = Schedule(id, payload);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                     case "editSchedule":
-                        try { result = EditSchedule(id, payload); }
-                        catch (Exception e) { result = "error"; } break;
+                        try
+                        {
+                            result = EditSchedule(id, payload);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                     case "dropQueue":
-                        try { result = DropQueue(id, (string)payload["itemId"]!); }
-                        catch (Exception e) { result = "error"; } break;
+                        try
+                        {
+                            result = DropQueue(id, (string)payload["itemId"]!);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                     case "upQueue":
-                        try { result = UpQueue(id, (string)payload["itemId"]!); }
-                        catch (Exception e) { Debug.WriteLine(e); result = "error"; } break;
+                        try
+                        {
+                            result = UpQueue(id, (string)payload["itemId"]!);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e); 
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                     case "downQueue":
-                        try { result = DownQueue(id, (string)payload["itemId"]!); }
-                        catch (Exception e) { Debug.WriteLine(e); result = "error"; } break;
+                        try
+                        {
+                            result = DownQueue(id, (string)payload["itemId"]!);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e); 
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                 }
                 
                 break;
@@ -115,7 +157,11 @@ public partial class RemoteClient
                             else display.SchedulerEntityId = (string)payload["schedulerId"]!;
                             result = "ok";
                         }
-                        catch (Exception e) { result = "error"; } break;
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                 }
 
                 break;

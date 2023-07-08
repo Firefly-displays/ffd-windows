@@ -73,7 +73,7 @@ public class DisplaysController
         {
             Displays.Add(new Display(
                 curr.DeviceName,
-                Display.DisplayStatus.Unknown,
+                Display.DisplayStatus.Online,
                 new List<int>
                 {
                     curr.Bounds.Top,
@@ -99,6 +99,7 @@ public class DisplaysController
         try
         {
             Debug.WriteLine("RunOnline");
+            Logger.Log("RunOnline");
             foreach (var display in this.Displays
                          .Where(d => d.Status == Display.DisplayStatus.Online && d.SchedulerEntityId != null))
             {
@@ -108,6 +109,7 @@ public class DisplaysController
         catch (Exception e)
         {
             Debug.WriteLine(e);
+            Logger.Log(e.ToString());
         }
     }
 
@@ -123,6 +125,7 @@ public class DisplaysController
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+                Logger.Log(e.ToString());
             }
         }
     }
