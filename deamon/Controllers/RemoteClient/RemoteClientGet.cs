@@ -21,6 +21,15 @@ public partial class RemoteClient
 
         switch (entity)
         {
+            case "img":
+                var c = deamonApi.GET<Content>(id);
+                WSSend(new JObject()
+                {
+                    { "type", "response" },
+                    { "requestId", requestId },
+                    { "payload", c.GetBaseThumb() }
+                }.ToString());
+                break;
             case "logs":
                 WSSend(new JObject()
                 {
@@ -56,7 +65,7 @@ public partial class RemoteClient
                     {
                         { "id", content.Id },
                         { "name", content.Name },
-                        { "img", content.GetBaseThumb() }
+                        // { "img", content.GetBaseThumb() }
                     }); 
                 }
                 break;
@@ -85,7 +94,7 @@ public partial class RemoteClient
                                 {
                                     { "id", c.Id },
                                     { "name", c.Name },
-                                    { "img", c.GetBaseThumb() }
+                                    // { "img", c.GetBaseThumb() }
                                 }
                             },
                             { "priority", i }
