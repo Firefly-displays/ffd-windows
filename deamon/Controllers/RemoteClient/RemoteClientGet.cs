@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using deamon.Entities;
@@ -20,6 +21,15 @@ public partial class RemoteClient
 
         switch (entity)
         {
+            case "img":
+                var c = deamonApi.GET<Content>(id);
+                WSSend(new JObject()
+                {
+                    { "type", "response" },
+                    { "requestId", requestId },
+                    { "payload", c.GetBaseThumb() }
+                }.ToString());
+                break;
             case "display":
                 var displays = id == "*" 
                     ? deamonApi.GET<Display>() 
@@ -47,7 +57,7 @@ public partial class RemoteClient
                     {
                         { "id", content.Id },
                         { "name", content.Name },
-                        { "img", content.GetBaseThumb() }
+                        // { "img", content.GetBaseThumb() }
                     }); 
                 }
                 break;
@@ -55,8 +65,6 @@ public partial class RemoteClient
                 if (id == "*")
                 {
                     var queues = deamonApi.GET<Queue>();
-                    Debug.WriteLine("fetching queues");
-                    Debug.WriteLine(queues.Count);
                     foreach (var queue in queues)
                     {
                         result.Add(new()
@@ -78,7 +86,7 @@ public partial class RemoteClient
                                 {
                                     { "id", c.Id },
                                     { "name", c.Name },
-                                    { "img", c.GetBaseThumb() }
+                                    // { "img", c.GetBaseThumb() }
                                 }
                             },
                             { "priority", i }
