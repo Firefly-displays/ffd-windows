@@ -32,10 +32,8 @@ public partial class Player : Window
         WindowState = WindowState.Normal;
         Left = display.Bounds[1];
         Top = display.Bounds[0];
-        Width = 500;
-        Height = 300;
-        // Width = display.Bounds[2];
-        // Height = display.Bounds[3];
+        Width = display.Bounds[2];
+        Height = display.Bounds[3];
 
         // var controller = new CoreAudioController();
         // controller.SetDefaultDevice(audioDevice);
