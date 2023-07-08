@@ -5,8 +5,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:deamon"
         mc:Ignorable="d"
-        Title="Player" Height="450" Width="800"
-        WindowStartupLocation="Manual">
+        Title="Player"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        Background="Black"
+        WindowState="Maximized">
     <Window.Resources>
         <local:SomeConverter x:Key="SomeConverter" />
         <local:VisibilityConverter x:Key="VisibilityConverter" />
