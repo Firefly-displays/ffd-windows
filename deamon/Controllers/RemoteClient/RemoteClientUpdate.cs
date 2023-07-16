@@ -248,7 +248,7 @@ public partial class RemoteClient
         var queueTriggerPair = queueTriggerPairs.Find(el => el.Id == itemId);
         queueTriggerPair.Cron = cron;
         queueTriggerPair.EmitTime = emitTime;
-        queueTriggerPair.Duration = duration * 60;
+        queueTriggerPair.Duration = duration;
         scheduler.QueueTriggerPairs = queueTriggerPairs;
 
         deamonApi.UPDATE(scheduler);
