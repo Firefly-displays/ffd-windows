@@ -25,7 +25,7 @@ public partial class RemoteClient
         return instance;
     }
     
-    private WebSocket ws = new("wss://oneren.space");
+    private WebSocket ws = new("ws://oneren.space:6969");
     private PeerConnection pc = new();
     private DeamonAPI deamonApi;
     private string saveFilePath;
