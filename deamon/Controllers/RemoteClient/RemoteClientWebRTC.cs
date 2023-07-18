@@ -53,8 +53,8 @@ public partial class RemoteClient
             JObject m = new JObject()
             {
                 { "role", "host" },
-                { "hostID", "123" },
-                { "hostPassword", "123" },
+                { "hostID", hostId },
+                { "hostPassword", hostPassword },
                 { "message", iceCandidateMsg.ToString() }
             };
 
@@ -208,8 +208,8 @@ public partial class RemoteClient
             JObject m = new JObject()
             {
                 { "role", "host" },
-                { "hostID", "123" },
-                { "hostPassword", "123" },
+                { "hostID", hostId },
+                { "hostPassword", hostPassword },
                 { "message", payload.ToString() }
             };
 

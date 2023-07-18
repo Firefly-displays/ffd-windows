@@ -12,18 +12,10 @@
                     >
         <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Display">
-                    <MenuItem Header="WinForms"></MenuItem>
-                    <MenuItem Header="WPF" ></MenuItem>
+                <MenuItem Header="Подключение">
+                    <MenuItem Name="HostId"></MenuItem>
+                    <MenuItem Name="HostPassword"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Pause"
-                          Click="Pause" />
-                <MenuItem Header="Resume"
-                          Click="Resume" />
-                <!-- <MenuItem Header="Restart" -->
-                <!--           Click="Restart" /> -->
-                <!-- <MenuItem Header="Skip" -->
-                <!--           Click="Skip" /> -->
                 <MenuItem Header="Управление"
                           Click="RunClient" />
                 <MenuItem Header="Выход"

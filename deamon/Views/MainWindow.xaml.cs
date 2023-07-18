@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using deamon.Models;
 
@@ -20,6 +21,13 @@ namespace deamon
                 NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Icon.ico"));
 
                 _bw = BackgroundWorker.GetInstance();
+                
+                var creds = File.ReadAllText(Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt"))
+                    .Split("\r\n");
+                
+                HostId.Header = "ID: " + creds[0];
+                HostPassword.Header = "Пароль: " + creds[1];
             }
             catch (Exception e)
             {

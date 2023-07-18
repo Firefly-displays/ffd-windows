@@ -31,15 +31,32 @@ public partial class RemoteClient
     private string saveFilePath;
     private FileStream saveFileStream;
 
+    private string hostId;
+    private string hostPassword;
+
     public RemoteClient()
     {
         deamonApi = DeamonAPI.GetInstance();
+
+        var creds = File.ReadAllText(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt"))
+            .Split("\r\n");
+        
+        hostId = creds[0];
+        hostPassword = creds[1];
         
         ws.OnOpen += (sender, e) =>
         {
             Debug.WriteLine("Соединение ws установлено");
             Logger.Log("Соединение ws установлено");
-            ws.Send("{\"type\":\"connection\",\"role\":\"host\",\"hostID\":\"123\",\"hostPassword\":\"123\"}");
+            
+            ws.Send(new JObject()
+            {
+                { "type", "connection" },
+                { "role", "host" },
+                { "hostID", hostId },
+                { "hostPassword", hostPassword }
+            }.ToString());
         };
 
         ws.OnClose += (sender, e) =>
@@ -90,8 +107,8 @@ public partial class RemoteClient
         ws.Send(new JObject()
         {
             { "role", "host" },
-            { "hostID", "123" },
-            { "hostPassword", "123" },
+            { "hostID", hostId },
+            { "hostPassword", hostPassword },
             { "message", msg }
         }.ToString());
     }
