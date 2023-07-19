@@ -101,10 +101,11 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         {
             { "type", "currMediaChanged" },
             { "displayId", Display.Id },
-            { "contentName", CurrentContent.Name },
-            { "contentId", CurrentContent.Id },
+            { "queueId", CurrentQueue.Id },
             { "queueName", CurrentQueue.Name },
-            {  "queueId", CurrentQueue.Id }
+            { "id", CurrentContent.Id },
+            { "name", CurrentContent.Name },
+            { "duration", CurrentContent.Duration.ToString() }
         }.ToString());
     }
     

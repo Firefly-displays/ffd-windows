@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using deamon.Entities;
 using deamon.Models;
+using Newtonsoft.Json;
 
 namespace deamon;
 
@@ -84,14 +85,24 @@ public class DeamonAPI: IDeamonAPI
         {
             foreach (var queue in GET<Queue>())
             {
+                var contentList = queue.ContentList;
+                bool updated = false;
+                
                 for (var i = 0; i < queue.ContentList.Count; i++)
                 {
                     var content = queue.ContentList[i];
                     if (content.Id == id)
                     {
-                        content = entity as Content;
-                        UPDATE(queue);
+                        queue.ContentList[i] = entity as Content;
+                        contentList[i] = entity as Content;
+                        updated = true;
                     }
+                }
+
+                if (updated)
+                {
+                    queue.ContentList = new List<Content>(contentList);
+                    UPDATE(queue);
                 }
             }
         }
