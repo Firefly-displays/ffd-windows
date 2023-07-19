@@ -24,6 +24,12 @@ public partial class RemoteClient
 
         switch (entity)
         {
+            case "content":
+                var c = deamonApi.GET<Content>(id);
+                c.Name = (string)payload["name"]!;
+                c.Duration = (int)payload["duration"]!;
+                deamonApi.UPDATE(c);
+                break;
             case "queue":
                 var queue = deamonApi.GET<Queue>(id);
 

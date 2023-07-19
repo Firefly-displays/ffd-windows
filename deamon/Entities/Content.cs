@@ -27,7 +27,7 @@ public class Content : Entity
     public string? ThumbPath { get => _thumbPath; set => SetField(ref _thumbPath, value); }
     private string? _thumbPath;
 
-    public Content(string? name, ContentType type, string path, string? thumb, int duration = 0) 
+    public Content(string? name, ContentType type, string path, string? thumb, int duration = 10) 
         : this(name, null, type, path, thumb, duration) {}
     
     

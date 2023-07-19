@@ -65,6 +65,8 @@ public partial class RemoteClient
                     {
                         { "id", content.Id },
                         { "name", content.Name },
+                        { "duration", content.Duration.ToString() },
+                        { "type", content.Type == Content.ContentType.Video ? "video" : "img" }
                         // { "img", content.GetBaseThumb() }
                     }); 
                 }

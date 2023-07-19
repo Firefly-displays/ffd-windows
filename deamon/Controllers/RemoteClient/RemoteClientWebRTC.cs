@@ -116,8 +116,10 @@ public partial class RemoteClient
                             break;
                         case "endSending": 
                             saveFileStream.Close();
-                            var newPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "Media/") + Guid.NewGuid() + "_" + (string)payload["name"]!;
-                            var thumpPath = newPath + ".jpg";
+                            var fileName = (string)payload["name"]!;
+                            var newPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "Media/") + Guid.NewGuid() + "_" + fileName;
+                            var isVideo = ((string)payload["type"]!).StartsWith("video");
+                            var thumpPath = isVideo ? newPath + ".jpg" : newPath;
 
                             try
                             {
@@ -133,31 +135,35 @@ public partial class RemoteClient
                             {
                                 Content newContent = new Content(
                                     (string)payload["name"]!,
-                                    ((string)payload["type"]!).StartsWith("video") 
+                                    isVideo
                                         ? Content.ContentType.Video 
                                         : Content.ContentType.Image, 
-                                    newPath, null);
+                                    newPath,
+                                    !isVideo ? thumpPath : null);
 
                                 deamonApi.POST(newContent);
-                                
-                                try
+
+                                if (isVideo)
                                 {
-                                    var thumbFileStream = new FileStream(thumpPath, FileMode.Create, FileAccess.Write);
-                                    var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                                    ffMpeg.GetVideoThumbnail(newPath, thumbFileStream, 5);
-                                    thumbFileStream.Close();
-                                    Debug.WriteLine("Saved raw thumb.");
-                                    Logger.Log("Saved raw thumb.");
+                                    try
+                                    {
+                                        var thumbFileStream = new FileStream(thumpPath, FileMode.Create, FileAccess.Write);
+                                        var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+                                        ffMpeg.GetVideoThumbnail(newPath, thumbFileStream, 5);
+                                        thumbFileStream.Close();
+                                        Debug.WriteLine("Saved raw thumb.");
+                                        Logger.Log("Saved raw thumb.");
                             
-                                    newContent.ThumbPath = thumpPath;
+                                        newContent.ThumbPath = thumpPath;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Logger.Log("Error while creating thumb.");
+                                        Logger.Log(e.ToString());
+                                    }
+                                    
+                                    deamonApi.UPDATE(newContent);
                                 }
-                                catch (Exception e)
-                                {
-                                    Logger.Log("Error while creating thumb.");
-                                    Logger.Log(e.ToString());
-                                }
-                            
-                                deamonApi.UPDATE(newContent);
                             }
                             catch (Exception e)
                             {
