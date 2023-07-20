@@ -196,4 +196,5 @@ public class DeamonAPI: IDeamonAPI
     public void PauseDisplay(string displayId) => DisplaysController.PausePlayer(displayId);
     public void ResumeDisplay(string displayId) => DisplaysController.ResumePlayer(displayId);
     public void SkipContent(string displayId) => DisplaysController.SkipContent(displayId);
+    public void Identify() => DisplaysController.Identify();
 }

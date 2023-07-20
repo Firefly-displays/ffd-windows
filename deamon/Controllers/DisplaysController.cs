@@ -89,8 +89,11 @@ public class DisplaysController
     {
         foreach (var display in Displays.Where(d => d.Status == Display.DisplayStatus.Online))
         {
-            var window = new DisplayIdentifier(display);
-            window.Show();
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+               var window = new DisplayIdentifier(display);
+                window.Show();
+            });
         }
     }
 

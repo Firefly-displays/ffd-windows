@@ -46,6 +46,10 @@ public partial class RemoteClient
                 Debug.WriteLine("stop");
                 Logger.Log("stop");
                 break;
+            case "identify":
+                deamonApi.Identify();
+                Logger.Log("identify");
+                break;
         }
         
         WSSend(new JObject()
