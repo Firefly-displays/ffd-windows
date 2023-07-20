@@ -37,6 +37,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         if (CurrentQueue != null)
         {
             CurrentContent = CurrentQueue.ContentList[0];
+            SendStatus();
         }
         
         CurrentQueues.CollectionChanged += OnCurrentQueuesChanged;
@@ -96,7 +97,11 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         Logger.Log("PickContent");
         Debug.WriteLine(JsonConvert.SerializeObject(CurrentContent.Path));
         Logger.Log(JsonConvert.SerializeObject(CurrentContent.Path));
-        
+        SendStatus();
+    }
+
+    private void SendStatus()
+    {
         RemoteClient.GetInstance().WSSend(new JObject()
         {
             { "type", "currMediaChanged" },
@@ -108,7 +113,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             { "duration", CurrentContent.Duration.ToString() }
         }.ToString());
     }
-    
+
     public delegate void ContentIsDoneHandler();
     event ContentIsDoneHandler ContentIsDone;
     

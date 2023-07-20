@@ -110,7 +110,7 @@ public partial class RemoteClient
                                 {
                                     { "id", c.Id },
                                     { "name", c.Name },
-                                    // { "img", c.GetBaseThumb() }
+                                    { "duration", c.Duration }
                                 }
                             },
                             { "priority", i }
