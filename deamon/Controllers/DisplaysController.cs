@@ -94,6 +94,19 @@ public class DisplaysController
         }
     }
 
+    public Content? GetCurrentContent(string displayId)
+    {
+        if (Players.All(p => p.Key.Id != displayId)) return null;
+        return Players.First(p => p.Key.Id == displayId).Value.CurrentContent;
+    }
+    
+    public Queue? GetCurrentQueue(string displayId)
+    {
+        if (Players.All(p => p.Key.Id != displayId)) return null;
+        return Players.First(p => p.Key.Id == displayId).Value.CurrentQueue;
+    }
+    
+
     public void RunOnline()
     {
         try

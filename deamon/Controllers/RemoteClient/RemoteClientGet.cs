@@ -45,11 +45,25 @@ public partial class RemoteClient
 
                 foreach (var display in displays)
                 {
+                    var currentContent = DisplaysController.GetInstance().GetCurrentContent(display.Id);
+                    var currentQueue = DisplaysController.GetInstance().GetCurrentQueue(display.Id);
+                    
                     result.Add(new()
                     {
                         { "id", display.Id },
                         { "name", display.Name },
-                        { "scheduler", display.SchedulerEntityId }
+                        { "scheduler", display.SchedulerEntityId },
+                        { "currentMedia", currentContent != null 
+                            ? new JObject()
+                            {
+                                { "queueId", currentQueue.Id },
+                                { "queueName", currentQueue.Name },
+                                { "id", currentContent.Id },
+                                { "name", currentContent.Name },
+                                { "duration", currentContent.Duration.ToString() }
+                            }.ToString()
+                            : null
+                        }
                     });      
                 }
                 

@@ -15,13 +15,13 @@ public sealed partial class PlayerController
     private IScheduler _scheduler;
     
     private ObservableCollection<QueueWithPriority> CurrentQueues;
-    private Queue? CurrentQueue { get; set; }
+    public Queue? CurrentQueue { get; set; }
     
     private Queue? DefaultQueue { get; set; }
 
     private Content _CurrectContent;
 
-    private Content CurrentContent
+    public Content CurrentContent
     {
         get => _CurrectContent;
         set
