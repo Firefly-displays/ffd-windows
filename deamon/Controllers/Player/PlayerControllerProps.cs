@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using deamon.Models;
 using Quartz;
 
@@ -42,13 +43,19 @@ public sealed partial class PlayerController
             CurrentContentDuration = value.Duration;
             CurrentContentIsVideo = value.Type == Content.ContentType.Video;
 
-            if (!CurrentContentIsVideo)
+            if (!CurrentContentIsVideo && State == PlayerState.Playing)
             {
-                var t = new Timer(_ => PickContent(), null, CurrentContentDuration * 1000, Timeout.Infinite);
+                var _ = UpdateContentWithDelayAsync(CurrentContent.Duration * 1000);
             }
             
             OnPropertyChanged();
         }
+    }
+
+    private async Task UpdateContentWithDelayAsync(int delayInMilliseconds)
+    {
+        await Task.Delay(delayInMilliseconds);
+        PickContent();
     }
 
     private string _CurrentContentImgSrc;

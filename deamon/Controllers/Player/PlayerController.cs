@@ -86,7 +86,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
     
     private void PickContent()
     {
-        if (!CurrentContentIsVideo && State == PlayerState.Paused) return;
+        if (!CurrentContentIsVideo && State != PlayerState.Playing) return;
         
         CurrentContent = IsQueueChanged 
             ? CurrentQueue.ContentList[0] 
