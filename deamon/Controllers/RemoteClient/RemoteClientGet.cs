@@ -68,10 +68,30 @@ public partial class RemoteClient
                 }
                 
                 break;
+            case "content_count":
+                WSSend(new JObject()
+                {
+                    { "type", "response" },
+                    { "requestId", requestId },
+                    { "payload", deamonApi.GET<Content>().Count.ToString() }
+                }.ToString());
+                return;
             case "content":
                 var contents = id == "*" 
                     ? deamonApi.GET<Content>() 
                     : new List<Content>() { deamonApi.GET<Content>(id) };
+
+                var page = jsonMsg["page"];
+                
+                if (page != null)
+                {
+                    int pageIndex = (int)page - 1;
+                    int pageSize = 9;
+
+                    contents = contents.GetRange(
+                        pageIndex * pageSize, 
+                        Int32.Min(pageSize, contents.Count-pageIndex * pageSize));
+                }
                 
                 foreach (var content in contents)
                 {
