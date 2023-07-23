@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -34,6 +35,8 @@ public partial class Player : Window
         Top = display.Bounds[0];
         Width = display.Bounds[2];
         Height = display.Bounds[3];
+
+        Maximize();
 
         // var controller = new CoreAudioController();
         // controller.SetDefaultDevice(audioDevice);
@@ -64,9 +67,12 @@ public partial class Player : Window
                 };
             }
         };
+    }
 
-        // VideoElement.LoadedBehavior = MediaState.Manual;
-        // VideoElement.MediaEnded += (o, a) => Play();
+    private async void Maximize()
+    {
+        await Task.Delay(2000);
+        WindowState = WindowState.Maximized;
     }
 }
 
