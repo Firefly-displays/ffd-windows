@@ -18,6 +18,8 @@
                 </MenuItem>
                 <MenuItem Header="Управление"
                           Click="RunClient" />
+                <MenuItem Header="Добавить медиа"
+                          Click="AddContent"/>
                 <MenuItem Header="Выход"
                           Click="ExitClick" />
             </ContextMenu>

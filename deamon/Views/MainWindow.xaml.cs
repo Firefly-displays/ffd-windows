@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using deamon.Models;
+using deamon.Views;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Application = System.Windows.Application;
 
 namespace deamon
 {
@@ -41,6 +47,7 @@ namespace deamon
             NotifyIcon.Visibility = Visibility.Hidden;
             _bw.Stop();
             Close();
+            Application.Current.Shutdown();
         }
 
         private void RunClient(object sender, RoutedEventArgs e)
@@ -54,15 +61,21 @@ namespace deamon
             _bw.API.PauseDisplay(displayId);
         }
         
-        private void Resume(object sender, RoutedEventArgs e)
+        private void AddContent(object sender, RoutedEventArgs e)
         {
-            var displayId = _bw.API.GET<Display>()[0].Id;
-            _bw.API.ResumeDisplay(displayId);
-        }
-
-        private void Restart(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
+            AddContent dlg = new AddContent();
+            dlg.ShowDialog();
+            
+            // OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            // openFileDialog.Multiselect = true;
+            // openFileDialog.ShowDialog();
+            // Debug.WriteLine("=============");
+            // Debug.WriteLine(res);
+            // Debug.WriteLine("=============");
+            
+            // string[] fileNames = openFileDialog.FileNames;
+            
+            // Logger.Log(JsonConvert.SerializeObject(fileNames));
         }
     }
 }
