@@ -28,6 +28,7 @@
             Name="VideoElement"
             Visibility="{Binding CurrentContentIsVideo, Converter={StaticResource VisibilityConverter}}"
             Source="{Binding CurrentContentVideoSrc}"
+            Volume="0"
             LoadedBehavior="{Binding State, Converter={StaticResource StatusConverter}}"
         />
         <!-- LoadedBehavior="Manual" -->
