@@ -49,6 +49,7 @@ namespace deamon
             _bw.Stop();
             Close();
             Application.Current.Shutdown();
+            Environment.Exit(0);
         }
         
         private void Pause(object sender, RoutedEventArgs e)

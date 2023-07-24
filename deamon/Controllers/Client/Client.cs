@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Mime;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.MixedReality.WebRTC;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebSocketSharp;
+using Application = System.Windows.Forms.Application;
 
 namespace deamon;
 
@@ -22,7 +25,6 @@ public partial class Client
 
     public Client(string url)
     {
-        InitWS(url);
         deamonApi = DeamonAPI.GetInstance();
 
         var creds = File.ReadAllText(Path.Combine(
@@ -31,6 +33,8 @@ public partial class Client
         
         hostId = creds[0];
         hostPassword = creds[1];
+        
+        InitWS(url);
     }
     
     private async Task InitWS(string url)
@@ -128,5 +132,8 @@ public partial class Client
         string[] lines = File.ReadAllLines(filePath);
         lines[^1] = newPass;
         File.WriteAllLines(filePath, lines);
+        
+        Application.Restart();
+        Environment.Exit(0);
     }
 }
