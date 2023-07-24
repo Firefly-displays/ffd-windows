@@ -93,9 +93,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             : CurrentQueue.ContentList[(CurrentQueue.ContentList.IndexOf(CurrentContent) + 1) % CurrentQueue.ContentList.Count];
         IsQueueChanged = false;
         
-        Debug.WriteLine("PickContent");
         Logger.Log("PickContent");
-        Debug.WriteLine(JsonConvert.SerializeObject(CurrentContent.Path));
         Logger.Log(JsonConvert.SerializeObject(CurrentContent.Path));
         SendStatus();
     }
@@ -143,6 +141,8 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     public void Stop()
     {
+        _scheduler.Shutdown();
+        _scheduler = null;
         PlayerView.Dispatcher.Invoke(() => PlayerView.Close());
     }
 
