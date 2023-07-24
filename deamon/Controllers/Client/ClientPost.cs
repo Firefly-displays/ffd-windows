@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
     private void Post(JObject jsonMsg)
     {

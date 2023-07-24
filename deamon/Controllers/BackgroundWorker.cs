@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using deamon.Entities;
 using deamon.Models;
 
@@ -23,14 +24,25 @@ public class BackgroundWorker : IBackgroundWorker
     private DisplaysController displaysController;
     
     public DeamonAPI API;
-    private readonly RemoteClient remoteClient;
+    private readonly Client _remoteClient;
+    private readonly Client _localClient;
 
     public BackgroundWorker()
     {
         Setuper.Setup();
         displaysController = DisplaysController.GetInstance();
         API = DeamonAPI.GetInstance();
-        remoteClient = RemoteClient.GetInstance();
+        
+        string pathToExe = @"C:\Users\onere\WebstormProjects\video-queue-web\node_app.exe";
+        Process process = new Process();
+        process.StartInfo.FileName = pathToExe;
+        // process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        // process.StartInfo.CreateNoWindow = true;
+        process.Start();
+        
+        _remoteClient = RemoteClient.GetInstance();
+        _localClient =  LocalClient.GetInstance();
+
         Start();
     }
 

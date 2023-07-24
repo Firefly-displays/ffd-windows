@@ -102,7 +102,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     private void SendStatus()
     {
-        RemoteClient.GetInstance().WSSend(new JObject()
+        string status = new JObject()
         {
             { "type", "currMediaChanged" },
             { "displayId", Display.Id },
@@ -111,7 +111,10 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             { "id", CurrentContent.Id },
             { "name", CurrentContent.Name },
             { "duration", CurrentContent.Duration.ToString() }
-        }.ToString());
+        }.ToString();
+        
+        RemoteClient.GetInstance().WSSend(status);
+        LocalClient.GetInstance().WSSend(status);
     }
 
     public delegate void ContentIsDoneHandler();

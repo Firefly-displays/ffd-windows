@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using deamon.Models;
+using System.Threading.Tasks;
 using Microsoft.MixedReality.WebRTC;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,21 +9,9 @@ using WebSocketSharp;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
-    private static RemoteClient? instance;
-    
-    public static RemoteClient GetInstance()
-    {
-        if (instance == null)
-        {
-            instance = new RemoteClient();
-        }
-
-        return instance;
-    }
-    
-    private WebSocket ws = new("ws://oneren.space:6969");
+    private WebSocket ws;
     private PeerConnection pc = new();
     private DeamonAPI deamonApi;
     private string saveFilePath;
@@ -34,8 +20,9 @@ public partial class RemoteClient
     private string hostId;
     private string hostPassword;
 
-    public RemoteClient()
+    public Client(string url)
     {
+        InitWS(url);
         deamonApi = DeamonAPI.GetInstance();
 
         var creds = File.ReadAllText(Path.Combine(
@@ -44,6 +31,11 @@ public partial class RemoteClient
         
         hostId = creds[0];
         hostPassword = creds[1];
+    }
+    
+    private async Task InitWS(string url)
+    {
+        ws = new(url);
         
         ws.OnOpen += (sender, e) =>
         {
@@ -63,12 +55,14 @@ public partial class RemoteClient
         {
             Debug.WriteLine("Соединение ws закрыто");
             Logger.Log("Соединение ws закрыто");
+            InitWS(url);
         };
 
         ws.OnError += (sender, e) =>
         {
             Debug.WriteLine("Ошибка ws: " + e.Message);
             Logger.Log("Ошибка ws: " + e.Message);
+            InitWS(url);
         };
 
         ws.OnMessage += async (sender, e) =>
@@ -90,16 +84,26 @@ public partial class RemoteClient
                     case "signal": HandleSignal(jsonMsg); break;
                     case "iceCandidate": HandleIceCandidate(jsonMsg); break;
                     case "offer": HandleOffer(jsonMsg); break;
+                    case "changePassword": ChangePassword(jsonMsg); break;
                 }
             }
             catch (Exception exception)
             {
-                Debug.WriteLine(exception);
                 Logger.Log(exception.ToString());
             }
         };
         
-        ws.Connect();
+        try
+        {
+            ws.Connect();
+            if (!ws.IsAlive) throw new Exception();
+        }
+        catch (Exception e)
+        {
+            Logger.Log(JsonConvert.SerializeObject(e));
+            await Task.Delay(500);
+            InitWS(url);
+        }
     }
 
     public void WSSend(string msg)
@@ -111,5 +115,18 @@ public partial class RemoteClient
             { "hostPassword", hostPassword },
             { "message", msg }
         }.ToString());
+    }
+
+    private void ChangePassword(JObject jsonMsg)
+    {
+        string newPass = (string)jsonMsg["password"]!;
+        hostPassword = newPass;
+
+        string filePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt");
+
+        string[] lines = File.ReadAllLines(filePath);
+        lines[^1] = newPass;
+        File.WriteAllLines(filePath, lines);
     }
 }

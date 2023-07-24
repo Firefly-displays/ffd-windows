@@ -4,13 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using deamon.Models;
 using Microsoft.MixedReality.WebRTC;
-using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
     private void HandleIceCandidate(JObject jsonMsg)
     {

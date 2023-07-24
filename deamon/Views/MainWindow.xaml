@@ -16,8 +16,9 @@
                     <MenuItem Name="HostId"></MenuItem>
                     <MenuItem Name="HostPassword"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Управление"
-                          Click="RunClient" />
+                <Hyperlink NavigateUri="http://localhost:3487" RequestNavigate="Hyperlink_RequestNavigate">
+                    Управление
+                </Hyperlink>
                 <MenuItem Header="Добавить медиа"
                           Click="AddContent"/>
                 <MenuItem Header="Выход"

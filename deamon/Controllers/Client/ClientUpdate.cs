@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using deamon.Entities;
 using deamon.Models;
 using Newtonsoft.Json;
@@ -11,7 +10,7 @@ using QueueTriggerPair = deamon.Entities.QueueTriggerPair;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
     private void Update(JObject jsonMsg)
     {

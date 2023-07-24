@@ -1,12 +1,9 @@
 ﻿using System.Diagnostics;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Diagnostics;
-using System.Windows;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
     private void HandleSignal(JObject jsonMsg)
     {

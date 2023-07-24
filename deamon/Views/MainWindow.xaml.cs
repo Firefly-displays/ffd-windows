@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Navigation;
 using deamon.Models;
 using deamon.Views;
 using Microsoft.Win32;
@@ -49,11 +50,6 @@ namespace deamon
             Close();
             Application.Current.Shutdown();
         }
-
-        private void RunClient(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
         
         private void Pause(object sender, RoutedEventArgs e)
         {
@@ -65,17 +61,12 @@ namespace deamon
         {
             AddContent dlg = new AddContent();
             dlg.ShowDialog();
-            
-            // OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            // openFileDialog.Multiselect = true;
-            // openFileDialog.ShowDialog();
-            // Debug.WriteLine("=============");
-            // Debug.WriteLine(res);
-            // Debug.WriteLine("=============");
-            
-            // string[] fileNames = openFileDialog.FileNames;
-            
-            // Logger.Log(JsonConvert.SerializeObject(fileNames));
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri){ UseShellExecute = true });
+            e.Handled = true;
         }
     }
 }

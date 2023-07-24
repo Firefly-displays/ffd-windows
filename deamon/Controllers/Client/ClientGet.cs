@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using deamon.Entities;
 using deamon.Models;
@@ -9,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace deamon;
 
-public partial class RemoteClient
+public partial class Client
 {
     private void Get(JObject jsonMsg)
     {
