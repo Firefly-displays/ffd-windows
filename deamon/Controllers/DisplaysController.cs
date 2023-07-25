@@ -152,6 +152,11 @@ public class DisplaysController
         // if (display.SchedulerEntity == null) return;
         Display display = Displays.First(d => d.Id == displayId);
         var player = new PlayerController(display);
+        if (player.State == PlayerController.PlayerState.Aborted)
+        {
+            SendStatus(displayId, "stopped");
+            return;
+        }
         Players.Add(display, player);
         SendStatus(displayId, "playing");
     }

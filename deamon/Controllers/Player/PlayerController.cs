@@ -30,7 +30,11 @@ public sealed partial class PlayerController: INotifyPropertyChanged
         var schedulerConfigs = EntityModel<SchedulerEntity>.GetInstance().Data
             .Where(x => x.Id == display.SchedulerEntityId);
 
-        if (!schedulerConfigs.Any()) { return; }
+        if (!schedulerConfigs.Any())
+        {
+            State = PlayerState.Aborted;
+            return;
+        }
         
         var schedulerConfig = schedulerConfigs.First();
         DefaultQueue = schedulerConfig.DefaultQueue;
@@ -142,7 +146,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
 
     public void Stop()
     {
-        _scheduler.Shutdown();
+        _scheduler?.Shutdown();
         _scheduler = null;
         PlayerView.Dispatcher.Invoke(() => PlayerView.Close());
     }

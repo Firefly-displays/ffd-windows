@@ -13,7 +13,7 @@ namespace deamon;
 
 public sealed partial class PlayerController
 {
-    private IScheduler _scheduler;
+    private IScheduler? _scheduler;
     
     private ObservableCollection<QueueWithPriority> CurrentQueues;
     public Queue? CurrentQueue { get; set; }
@@ -118,7 +118,8 @@ public sealed partial class PlayerController
     public enum PlayerState
     {
         Playing,
-        Paused
+        Paused,
+        Aborted
     }
     
     private PlayerState _State;
