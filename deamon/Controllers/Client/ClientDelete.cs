@@ -24,6 +24,12 @@ public partial class Client
                 case "scheduler":
                     deamonApi.DELETE<SchedulerEntity>(id);
                     break;
+                case "content":
+                    deamonApi.DELETE<Content>(id);
+                    break;
+                case "display":
+                    deamonApi.DELETE<Display>(id);
+                    break;
             }
         }
         catch (Exception e)
