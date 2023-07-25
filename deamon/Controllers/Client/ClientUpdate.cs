@@ -167,6 +167,17 @@ public partial class Client
                             Logger.Log(e.ToString());
                             result = "error";
                         } break;
+                    case "rename":
+                        try
+                        {
+                            display.Name = (string)payload["name"]!;
+                            result = "ok";
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Log(e.ToString());
+                            result = "error";
+                        } break;
                 }
 
                 break;
