@@ -15,7 +15,7 @@ namespace deamon;
 
 public sealed partial class PlayerController
 {
-    private async void InitScheduler(SchedulerEntity schedulerEntity, EventHandler schedulerInitialized)
+    private async void InitScheduler(SchedulerEntity schedulerEntity, EventHandler? schedulerInitialized)
     {
         IScheduler scheduler = await new StdSchedulerFactory().GetScheduler();
         _scheduler = scheduler;
@@ -45,7 +45,10 @@ public sealed partial class PlayerController
         }
         
         await scheduler.Start();
-        schedulerInitialized.Invoke(null, EventArgs.Empty);
+        if (schedulerInitialized != null)
+        {
+            schedulerInitialized.Invoke(null, EventArgs.Empty);
+        }
     }
     
     private ITrigger CreateTrigger(TriggerConfig triggerConfig)

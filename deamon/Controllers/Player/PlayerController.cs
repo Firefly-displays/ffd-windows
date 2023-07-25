@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using deamon.Entities;
 using deamon.Models;
@@ -149,5 +150,26 @@ public sealed partial class PlayerController: INotifyPropertyChanged
     public void SkipContent()
     {
         PickContent();
+    }
+
+    public async Task SafeRefresh()
+    {
+        var schedulerConfigs = EntityModel<SchedulerEntity>.GetInstance().Data
+            .Where(x => x.Id == Display.SchedulerEntityId);
+
+        if (!schedulerConfigs.Any()) return;
+        
+        var schedulerConfig = schedulerConfigs.First();
+        DefaultQueue = schedulerConfig.DefaultQueue;
+
+        if (CurrentQueue?.Id == DefaultQueue?.Id)
+        {
+            CurrentQueue = DefaultQueue;
+        }
+
+        await _scheduler.Shutdown();
+        _scheduler = null;
+        
+        InitScheduler(schedulerConfig, null);
     }
 }

@@ -178,6 +178,8 @@ public partial class Client
             { "requestId", requestId },
             { "payload", result }
         }.ToString());
+        
+        DisplaysController.GetInstance().SafeRefresh();
     }
     
     private string UpQueue(string schedulerId, string queueId)

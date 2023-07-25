@@ -214,4 +214,12 @@ public class DisplaysController
         if (Players[d].State == PlayerController.PlayerState.Playing) return "playing";
         return "unknown";
     }
+
+    public void SafeRefresh()
+    {
+        foreach (var (display, playerController) in Players)
+        {
+            playerController.SafeRefresh();
+        }
+    }
 }
