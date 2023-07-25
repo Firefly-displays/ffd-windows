@@ -9,6 +9,7 @@ using deamon.Models;
 using deamon.Views;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace deamon;
 
@@ -152,18 +153,21 @@ public class DisplaysController
         Display display = Displays.First(d => d.Id == displayId);
         var player = new PlayerController(display);
         Players.Add(display, player);
+        SendStatus(displayId, "playing");
     }
     
     public void PausePlayer(string displayId)
     {
         if (Players.All(p => p.Key.Id != displayId)) return;
         Players.First(p => p.Key.Id == displayId).Value.Pause();
+        SendStatus(displayId, "paused");
     }
     
     public void ResumePlayer(string displayId)
     {
         if (Players.All(p => p.Key.Id != displayId)) return;
         Players.First(p => p.Key.Id == displayId).Value.Resume();
+        SendStatus(displayId, "playing");
     }
     
     public void StopPlayer(string displayId)
@@ -172,6 +176,7 @@ public class DisplaysController
         Players.First(p => p.Key.Id == displayId).Value.Stop();
         Display display = Displays.First(d => d.Id == displayId);
         Players.Remove(display);
+        SendStatus(displayId, "stopped");
     }
     
     public void Restart(string displayId)
@@ -184,5 +189,29 @@ public class DisplaysController
     {
         if (Players.All(p => p.Key.Id != displayId)) return;
         Players.First(p => p.Key.Id == displayId).Value.SkipContent();
+    }
+    
+    private void SendStatus(string displayId, string status)
+    {
+        string msg = new JObject()
+        {
+            { "type", "displayStatusChanged" },
+            { "displayId", displayId },
+            { "status", status }
+        }.ToString();
+
+        RemoteClient.GetInstance().WSSend(msg);
+        LocalClient.GetInstance().WSSend(msg);
+    }
+
+    public string GetStatus(string displayId)
+    {
+        if (Displays.All(x => x.Id != displayId)) return "unknown";
+        var d = Displays.First(x => x.Id == displayId);
+        if (d.Status == Display.DisplayStatus.Offline) return "offline";
+        if (!Players.ContainsKey(d)) return "stopped";
+        if (Players[d].State == PlayerController.PlayerState.Paused) return "paused";
+        if (Players[d].State == PlayerController.PlayerState.Playing) return "playing";
+        return "unknown";
     }
 }

@@ -46,6 +46,7 @@ public partial class Client
                 {
                     var currentContent = DisplaysController.GetInstance().GetCurrentContent(display.Id);
                     var currentQueue = DisplaysController.GetInstance().GetCurrentQueue(display.Id);
+                    var status = DisplaysController.GetInstance().GetStatus(display.Id);
                     
                     result.Add(new()
                     {
@@ -62,7 +63,8 @@ public partial class Client
                                 { "duration", currentContent.Duration.ToString() }
                             }.ToString()
                             : null
-                        }
+                        },
+                        { "status", status }
                     });      
                 }
                 
