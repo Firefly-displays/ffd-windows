@@ -6,7 +6,7 @@ namespace deamon;
 public static class Logger
 {
     private static readonly string LogFilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "log.txt");
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "log.txt");
         // AppDomain.CurrentDomain.BaseDirectory, "log.txt");
 
     public static void Log(string msg)
@@ -26,7 +26,7 @@ public static class Logger
 
     public static string GetLogs()
     {
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "log.txt");
+        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "log.txt");
         int numberOfLines = 1000;
 
         if (!File.Exists(filePath))

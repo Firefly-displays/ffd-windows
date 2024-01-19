@@ -68,7 +68,7 @@ public class EntityModel<T> where T : Entity
         Data.Remove(Data.First(x => x.Id == id));
     }
 
-    private readonly string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", typeof(T).Name + ".json");
+    private readonly string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", typeof(T).Name + ".json");
     
     private EntityModel()
     {

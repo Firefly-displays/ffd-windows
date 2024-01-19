@@ -8,8 +8,8 @@ public static class Setuper
 {
     public static void Setup()
     {
-        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue"));
-        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "Media"));
+        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays"));
+        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "Media"));
 
         SetupCreds();
     }
@@ -34,7 +34,7 @@ public static class Setuper
 
     private static void SetupCreds()
     {
-        var credsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt");
+        var credsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt");
         
         if (!File.Exists(credsFilePath))
         {

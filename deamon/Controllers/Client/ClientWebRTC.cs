@@ -101,7 +101,7 @@ public partial class Client
                             try
                             {
                                 saveFilePath = Path.Combine(
-                                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "Media/"
+                                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "Media/"
                                 ) + Guid.NewGuid() + "_" + (string)payload["name"]! + ".tmp";
                                 saveFileStream = new FileStream(saveFilePath, FileMode.Create, FileAccess.Write);
                             }
@@ -116,7 +116,7 @@ public partial class Client
                         case "endSending": 
                             saveFileStream.Close();
                             var fileName = (string)payload["name"]!;
-                            var newPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "Media/") + Guid.NewGuid() + "_" + fileName;
+                            var newPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "Media/") + Guid.NewGuid() + "_" + fileName;
                             var isVideo = ((string)payload["type"]!).StartsWith("video");
                             var thumpPath = isVideo ? newPath + ".jpg" : newPath;
 

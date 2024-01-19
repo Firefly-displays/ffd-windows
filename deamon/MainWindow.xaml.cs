@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using deamon.Models;
 using deamon.Views;
@@ -25,12 +26,15 @@ namespace deamon
             {
                 InitializeComponent();
                 Hide();
-                NotifyIcon.Icon = new System.Drawing.Icon(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Icon.ico"));
+                
+                Uri iconUri = new Uri("pack://application:,,,/Resources/logo.ico", UriKind.RelativeOrAbsolute);
+                Stream? iconStream = Application.GetResourceStream(iconUri)?.Stream;
+                if (iconStream != null) NotifyIcon.Icon = new System.Drawing.Icon(iconStream);
 
                 _bw = BackgroundWorker.GetInstance();
                 
                 var creds = File.ReadAllText(Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt"))
+                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt"))
                     .Split("\r\n");
                 
                 HostId.Header = "ID: " + creds[0];
@@ -64,9 +68,9 @@ namespace deamon
             dlg.ShowDialog();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void NotifyIcon_TrayLeftMouseDown(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri){ UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("http://localhost:3487"){ UseShellExecute = true });
             e.Handled = true;
         }
     }

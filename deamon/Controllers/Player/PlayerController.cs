@@ -116,7 +116,7 @@ public sealed partial class PlayerController: INotifyPropertyChanged
             { "duration", CurrentContent.Duration.ToString() }
         }.ToString();
         
-        RemoteClient.GetInstance().WSSend(status);
+        // RemoteClient.GetInstance().WSSend(status);
         LocalClient.GetInstance().WSSend(status);
     }
 

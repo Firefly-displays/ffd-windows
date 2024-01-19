@@ -205,7 +205,7 @@ public class DisplaysController
             { "status", status }
         }.ToString();
 
-        RemoteClient.GetInstance().WSSend(msg);
+        // RemoteClient.GetInstance().WSSend(msg);
         LocalClient.GetInstance().WSSend(msg);
     }
 

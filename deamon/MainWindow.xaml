@@ -7,7 +7,8 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d">
     <tb:TaskbarIcon x:Name="NotifyIcon"
-                    ToolTipText="VideoQueue"
+                    ToolTipText="Firefly Displays"
+                    TrayLeftMouseDown="NotifyIcon_TrayLeftMouseDown"
                     Visibility="Visible"
                     >
         <tb:TaskbarIcon.ContextMenu>
@@ -16,9 +17,6 @@
                     <MenuItem Name="HostId"></MenuItem>
                     <MenuItem Name="HostPassword"></MenuItem>
                 </MenuItem>
-                <Hyperlink NavigateUri="http://localhost:3487" RequestNavigate="Hyperlink_RequestNavigate">
-                    Управление
-                </Hyperlink>
                 <MenuItem Header="Добавить медиа"
                           Click="AddContent"/>
                 <MenuItem Header="Выход"

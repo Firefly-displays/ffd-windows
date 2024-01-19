@@ -8,7 +8,7 @@ public static class RemoteClient
     {
         if (instance == null)
         {
-            instance = new Client("ws://oneren.space:6969");
+            // instance = new Client("ws://oneren.space:6969");
         }
 
         return instance;

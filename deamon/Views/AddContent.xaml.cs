@@ -39,7 +39,7 @@ public partial class AddContent : Window
 
                 string? thumpPath = !isVideo ? filePath : Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                    "VideoQueue", "Media", Guid.NewGuid() + fileName + ".png");
+                    "Firefly-Displays", "Media", Guid.NewGuid() + fileName + ".png");
 
                 Content newContent = new Content(
                     fileName,

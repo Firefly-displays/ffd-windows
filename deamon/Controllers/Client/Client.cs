@@ -28,7 +28,7 @@ public partial class Client
         deamonApi = DeamonAPI.GetInstance();
 
         var creds = File.ReadAllText(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt"))
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt"))
             .Split("\r\n");
         
         hostId = creds[0];
@@ -127,7 +127,7 @@ public partial class Client
         hostPassword = newPass;
 
         string filePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VideoQueue", "credentials.txt");
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt");
 
         string[] lines = File.ReadAllLines(filePath);
         lines[^1] = newPass;
