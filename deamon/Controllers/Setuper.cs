@@ -8,9 +8,21 @@ public static class Setuper
 {
     public static void Setup()
     {
-        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays"));
-        SetupDir(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "Media"));
+        string appDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Firefly-Displays");
+        SetupDir(appDir);
+        SetupDir(Path.Combine(appDir, "Media"));
 
+        foreach  (string entity in new [] {"Content", "Display", "Queue", "QueueTriggerPair", "SchedulerEntity"})
+        {
+            string filePath = Path.Combine(appDir, entity + ".json");
+
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, "[]");
+            }
+        }
+        
         SetupCreds();
     }
 
