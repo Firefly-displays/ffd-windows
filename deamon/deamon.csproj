@@ -24,6 +24,7 @@
     
     <ItemGroup>
       <Resource Include="Resources\logo.ico" />
+      <None Remove="Resources\node_app.exe" />
     </ItemGroup>
 
 </Project>
