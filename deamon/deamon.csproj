@@ -5,6 +5,7 @@
         <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +15,7 @@
       <PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
       <PackageReference Include="NReco.VideoInfo" Version="1.2.0" />
       <PackageReference Include="Quartz" Version="3.6.2" />
+      <PackageReference Include="System.IO.Abstractions" Version="20.0.4" />
       <PackageReference Include="System.Management" Version="8.0.0-preview.4.23259.5" />
       <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
     </ItemGroup>

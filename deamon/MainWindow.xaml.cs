@@ -27,14 +27,15 @@ namespace deamon
                 InitializeComponent();
                 Hide();
                 
+                Environment.SetEnvironmentVariable("AppFolder", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                
                 Uri iconUri = new Uri("pack://application:,,,/Resources/logo.ico", UriKind.RelativeOrAbsolute);
                 Stream? iconStream = Application.GetResourceStream(iconUri)?.Stream;
                 if (iconStream != null) NotifyIcon.Icon = new System.Drawing.Icon(iconStream);
 
                 _bw = BackgroundWorker.GetInstance();
                 
-                var creds = File.ReadAllText(Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt"))
+                var creds = File.ReadAllText(Path.Combine(Environment.GetEnvironmentVariable("AppFolder")!, "Firefly-Displays", "credentials.txt"))
                     .Split("\r\n");
                 
                 HostId.Header = "ID: " + creds[0];

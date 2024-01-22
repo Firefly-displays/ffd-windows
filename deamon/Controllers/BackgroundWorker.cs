@@ -30,7 +30,7 @@ public class BackgroundWorker : IBackgroundWorker
 
     public BackgroundWorker()
     {
-        Setuper.Setup();
+        new Setuper().Setup();
         displaysController = DisplaysController.GetInstance();
         API = DeamonAPI.GetInstance();
         

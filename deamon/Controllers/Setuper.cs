@@ -1,15 +1,19 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using System.IO.Abstractions;
+using deamon.Utils;
 
 namespace deamon;
 
-public static class Setuper
+public class Setuper : FSTestable
 {
-    public static void Setup()
+    public Setuper(IFileSystem fs) : base(fs) { }
+    public Setuper() { }
+    
+    public void Setup()
     {
-        string appDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Firefly-Displays");
+        string appDir = Path.Combine(Environment.GetEnvironmentVariable("AppFolder")!, "Firefly-Displays");
         SetupDir(appDir);
         SetupDir(Path.Combine(appDir, "Media"));
 
@@ -17,22 +21,22 @@ public static class Setuper
         {
             string filePath = Path.Combine(appDir, entity + ".json");
 
-            if (!File.Exists(filePath))
+            if (!FS.File.Exists(filePath))
             {
-                File.WriteAllText(filePath, "[]");
+                FS.File.WriteAllText(filePath, "[]");
             }
         }
         
         SetupCreds();
     }
 
-    private static void SetupDir(string directoryPath)
+    private void SetupDir(string directoryPath)
     {
         try
         {
-            if (!Directory.Exists(directoryPath))
+            if (!FS.Directory.Exists(directoryPath))
             {
-                Directory.CreateDirectory(directoryPath);
+                FS.Directory.CreateDirectory(directoryPath);
             }
 
             Logger.Log($"directory {directoryPath} created");
@@ -44,9 +48,9 @@ public static class Setuper
         }
     }
 
-    private static void SetupCreds()
+    private void SetupCreds()
     {
-        var credsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Firefly-Displays", "credentials.txt");
+        var credsFilePath = Path.Combine(Environment.GetEnvironmentVariable("AppFolder")!, "Firefly-Displays", "credentials.txt");
         
         if (!File.Exists(credsFilePath))
         {
